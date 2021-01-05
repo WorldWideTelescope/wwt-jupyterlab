@@ -1,13 +1,12 @@
 <template>
   <div id="app">
     <WorldWideTelescope
-      wwt-namespace="wwt-embed"
-      v-bind:style="{height: wwtComponentLayout.height, top: wwtComponentLayout.top}"
+      wwt-namespace="wwt-research"
     ></WorldWideTelescope>
 
     <transition name="fade">
       <div id="overlays">
-        <p v-show="embedSettings.showCoordinateReadout">{{ coordText }}</p>
+        <p>{{ coordText }}</p>
       </div>
     </transition>
 
@@ -19,7 +18,6 @@
             <ul class="tooltip-content tool-menu">
               <li v-show="showCrossfader"><a href="#" v-close-popover @click="selectTool('crossfade')"><font-awesome-icon icon="adjust" /> Crossfade</a></li>
               <li v-show="showBackgroundChooser"><a href="#" v-close-popover @click="selectTool('choose-background')"><font-awesome-icon icon="mountain" /> Choose background</a></li>
-              <li v-show="showPlaybackControls"><a href="#" v-close-popover @click="selectTool('playback-controls')"><font-awesome-icon icon="redo" /> Tour player controls</a></li>
             </ul>
           </template>
         </v-popover>
@@ -49,25 +47,6 @@
           </option>
         </select>
       </template>
-      <template v-else-if="currentTool == 'playback-controls'">
-        <div class="playback-controls">
-          <font-awesome-icon v-bind:icon="tourPlaybackIcon"
-            size="lg" class="clickable" @click="tourPlaybackButtonClicked()"></font-awesome-icon>
-          <vue-slider
-            class="scrubber"
-            v-model="twoWayTourTimecode"
-            :max="wwtTourRunTime"
-            :marks="wwtTourStopStartTimes"
-            :tooltip-formatter="formatTimecode"
-            :adsorb="true"
-            :duration="0"
-            :interval="0.001"
-            :contained="true"
-            :hide-label="true"
-            :use-keyboard="false"
-          ></vue-slider>
-        </div>
-      </template>
       </div>
     </div>
   </div>
@@ -82,7 +61,7 @@ import { fmtDegLat, fmtDegLon, fmtHours } from "@wwtelescope/astro";
 import { ImageSetType } from "@wwtelescope/engine-types";
 import { SetupForImagesetOptions, WWTAwareComponent } from "@wwtelescope/engine-vuex";
 
-type ToolType = "crossfade" | "choose-background" | "playback-controls" | null;
+type ToolType = "crossfade" | "choose-background" | null;
 
 class BackgroundImageset {
   public imagesetName: string;
@@ -109,7 +88,6 @@ export default class App extends WWTAwareComponent {
   backgroundImagesets: BackgroundImageset[] = [];
   currentTool: ToolType = null;
   fullscreenModeActive = false;
-  tourPlaybackJustEnded = false;
 
   get coordText() {
     if (this.wwtRenderType == ImageSetType.sky) {
@@ -159,18 +137,14 @@ export default class App extends WWTAwareComponent {
     return this.wwtForegroundImageset != this.wwtBackgroundImageset;
   }
 
-  get showPlaybackControls() {
-    return this.wwtIsTourPlayerActive && !this.wwtIsTourPlaying;
-  }
-
   get showToolMenu() {
     // This should return true if there are any tools to show.
-    return this.showBackgroundChooser || this.showCrossfader || this.showPlaybackControls;
+    return this.showBackgroundChooser || this.showCrossfader;
   }
 
-  created() {
-    let prom = this.waitForReady();
-  }
+  //created() {
+  //  let prom = this.waitForReady();
+  //}
 
   mounted() {
     if (screenfull.isEnabled) {
@@ -327,25 +301,6 @@ body {
   }
 
   .clickable {
-    cursor: pointer;
-  }
-}
-
-
-.playback-controls {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 75vw;
-
-  .clickable {
-    margin: 0 8px;
-    cursor: pointer;
-  }
-
-  .scrubber {
-    flex: 1;
     cursor: pointer;
   }
 }

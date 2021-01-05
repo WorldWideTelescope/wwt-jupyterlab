@@ -6,7 +6,8 @@
     "doc": "lerna run doc",
     "lint": "lerna run lint",
     "test": "lerna run test",
-    "pack": "lerna exec npm pack"
+    "pack": "lerna exec npm pack",
+    "serve-app": "cd research-app && npm run serve"
   },
   "dependencies": {
     "@wwtelescope/research-app": "file:research-app"
