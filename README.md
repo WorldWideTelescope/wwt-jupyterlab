@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/aasworldwidetelescope/WWT/_apis/build/status/WorldWideTelescope.wwt-research-kit?branchName=master)](https://dev.azure.com/aasworldwidetelescope/WWT/_build/latest?definitionId=24&branchName=master)
+
 # AAS WorldWide Telescope Research Kit
 
 This repository contains the code for the [AAS] [WorldWide Telescope][wwt-home]
