@@ -1,0 +1,12 @@
+{
+  "packages": [
+    "research-app"
+  ],
+  "version": "independent",
+  "npmClient": "npm",
+  "command": {
+    "bootstrap": {
+      "npmClientArgs": ["--no-package-lock"]
+    }
+  }
+}
