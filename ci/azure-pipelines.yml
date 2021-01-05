@@ -8,7 +8,7 @@ trigger:
     - rc
 
 stages:
-- stage: ApplyVerions
+- stage: ApplyVersions
   jobs:
   - template: azure-apply-versions.yml
 
