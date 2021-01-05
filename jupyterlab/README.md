@@ -10,7 +10,10 @@ about WWT [here][wwt-home].
 
 ## Requirements
 
-* JupyterLab >= 2.0
+This extension supports:
+
+- The JupyterLab 2.x series
+- The JupyterLab 3.x series
 
 
 ## Installation
@@ -21,7 +24,7 @@ In principle, all you need to do is:
 $ jupyter labextension install @wwtelescope/jupyterlab
 ```
 
-There is a `jupyter labextension uninstall` command to remove the extension
+There is a `jupyter labextension uninstall` command to remove the extension.
 
 
 ## Development
