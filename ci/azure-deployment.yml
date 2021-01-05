@@ -24,8 +24,8 @@ jobs:
   steps:
   - template: azure-job-setup.yml
 
-  # Set the "deplpoyment tag" for the research app. The variable
-  # $RESEARC_APP_DEPLOYMENT_TAG is set to either "latest", if we're doing a
+  # Set the "deployment tag" for the research app. The variable
+  # $RESEARCH_APP_DEPLOYMENT_TAG is set to either "latest", if we're doing a
   # 'main dev' release (= merge to master), "skip", if we shouldn't release it;
   # or the major version number, if we're making a real official release of the
   # package.
@@ -69,6 +69,55 @@ jobs:
           -ResourceGroupName wwt-web01 `
           -EndpointName wwtweb-prod `
           -PurgeContent '/research/$(RESEARCH_APP_DEPLOYMENT_TAG)/*'
+
+- job: deploy_docs
+  pool:
+    vmImage: windows-latest
+  variables:
+  - group: Deployment Credentials
+  steps:
+  - template: azure-job-setup.yml
+
+  # Another "deployment tag". Here we never skip, but we track the version
+  # of @wwtelescope/research-app.
+  - bash: |
+      set -euo pipefail
+      if [[ ${isMainDev} == True ]] ; then
+        tag=latest
+      else
+        # Docs release tag is `major.minor`.
+        tag="$(cranko show version @wwtelescope/research-app |cut -d. -f1,2)"
+      fi
+      echo "docs deployment tag: $isMainDev, $isRelease => $tag"
+      echo "##vso[task.setvariable variable=DOCS_DEPLOYMENT_TAG;]$tag"
+    displayName: Determine deployment tag
+    env:
+      isMainDev: ${{ parameters.isMainDev }}
+      isRelease: ${{ parameters.isRelease }}
+
+  - task: AzureFileCopy@3
+    displayName: Deploy documentation
+    inputs:
+      SourcePath: '$(Pipeline.Workspace)/docs'
+      azureSubscription: 'aas@wwtadmindotnetfoundation'
+      Destination: 'AzureBlob'
+      storage: 'wwtwebstatic'
+      ContainerName: '$web'
+      blobPrefix: '_docs/research-kit/$(DOCS_DEPLOYMENT_TAG)'
+
+  - task: AzurePowerShell@4
+    displayName: CDN purge - docs
+    inputs:
+      azureSubscription: 'aas@wwtadmindotnetfoundation'
+      azurePowerShellVersion: 'LatestVersion'
+      scriptType: 'inlineScript'
+      inline: |
+        Unpublish-AzCdnEndpointContent `
+          -ProfileName wwt-cdn-01 `
+          -ResourceGroupName wwt-web01 `
+          -EndpointName wwtwebdocs-prod `
+          -PurgeContent '/research-kit/$(DOCS_DEPLOYMENT_TAG)/*'
+
 
 # Deployment jobs that should only happen on updates to `rc`, i.e.
 # primary releases.

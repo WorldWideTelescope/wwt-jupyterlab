@@ -5,7 +5,7 @@
 
 parameters:
 - name: 'zolaVersion'
-  default: '0.10.1'
+  default: '0.12.2'
   type: string
 
 jobs:
@@ -97,43 +97,44 @@ jobs:
 
 # Docs
 
-# - job: docs
-#   pool:
-#     vmImage: ubuntu-20.04
-#   steps:
-#   - template: azure-job-setup.yml
-#     parameters:
-#       setupBuild: true
-#
-#   - bash: npm run build
-#     displayName: NPM build
-#
-#   - script: npm run doc
-#     displayName: NPM doc
-#
-#   - bash: |
-#       set -xeuo pipefail
-#       fn="zola-v${{ parameters.zolaVersion }}-x86_64-unknown-linux-gnu.tar.gz"
-#       u="https://github.com/getzola/zola/releases/download/v${{ parameters.zolaVersion }}/$fn"
-#       wget "$u"
-#       tar xzf "$fn"
-#       rm -rf "$fn"
-#     displayName: Install Zola
-#
-#   - bash: |
-#       set -xeuo pipefail
-#       cd docs
-#       ../zola check
-#     displayName: Check Zola docs site
-#
-#   - bash: |
-#       set -xeuo pipefail
-#       cd docs
-#       ../zola build -o $ARTIFACT_STAGING/docs
-#     displayName: Zola docs build
-#
-#   - task: PublishPipelineArtifact@0
-#     displayName: Publish docs artifacts
-#     inputs:
-#       artifactName: docs
-#       targetPath: $(Build.ArtifactStagingDirectory)/docs
+- job: docs
+  pool:
+    vmImage: ubuntu-20.04
+
+  steps:
+  - template: azure-job-setup.yml
+    parameters:
+      setupBuild: true
+
+  - bash: npm run build
+    displayName: NPM build
+
+  - script: npm run doc
+    displayName: NPM doc
+
+  - bash: |
+      set -xeuo pipefail
+      fn="zola-v${{ parameters.zolaVersion }}-x86_64-unknown-linux-gnu.tar.gz"
+      u="https://github.com/getzola/zola/releases/download/v${{ parameters.zolaVersion }}/$fn"
+      wget "$u"
+      tar xzf "$fn"
+      rm -rf "$fn"
+    displayName: Install Zola
+
+  - bash: |
+      set -xeuo pipefail
+      cd docs
+      ../zola check
+    displayName: Check Zola docs site
+
+  - bash: |
+      set -xeuo pipefail
+      cd docs
+      ../zola build -o $ARTIFACT_STAGING/docs
+    displayName: Zola docs build
+
+  - task: PublishPipelineArtifact@0
+    displayName: Publish docs artifacts
+    inputs:
+      artifactName: docs
+      targetPath: $(Build.ArtifactStagingDirectory)/docs
