@@ -17,7 +17,7 @@ export class WWTLabViewer extends Widget {
     super();
 
     this.iframe = document.createElement('iframe');
-    this.iframe.src = '/wwt/wwt.html';
+    this.iframe.src = '//web.wwtassets.org/research/latest/';  // XXX
     this.iframe.style.setProperty('height', '100%', '');
     this.iframe.style.setProperty('width', '100%', '');
     this.node.appendChild(this.iframe);
