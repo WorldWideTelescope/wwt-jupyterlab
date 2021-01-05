@@ -28,10 +28,10 @@ structure of this repository is dealt with using [Lerna].
 
 Running NPM command from inside package subdirectories unfortunately *will not*
 work due to the centralized `node_modules` directory we use with Lerna. To run
-the `lint` command only for the `engine-types` submodule, run:
+the `lint` command only for the `research-app` submodule, run:
 
 ```
-npx lerna run --scope @wwtelescope/engine-types lint
+npx lerna run --scope @wwtelescope/research-app lint
 ```
 
 (The `--scope` argument can be a glob expression if you want to run on a subset
