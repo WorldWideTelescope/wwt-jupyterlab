@@ -1,0 +1,30 @@
+# Copyright 2020 the .NET Foundation
+# Licensed under the MIT License
+
+# Apply versions with Cranko and save the resulting git commit as an artifact.
+
+jobs:
+- job: apply_versions
+  pool:
+    vmImage: ubuntu-20.04
+
+  steps:
+  - template: azure-job-setup.yml
+    parameters:
+      releaseCommitArtifactAvailable: false
+
+  - bash: |
+      set -xeuo pipefail
+      cranko release-workflow apply-versions
+      git add .
+      cranko release-workflow commit
+      git show
+      mkdir $ARTIFACT_STAGING/git-release
+      git bundle create $ARTIFACT_STAGING/git-release/release.bundle origin/master..HEAD
+    displayName: Create and bundle release commit
+
+  - task: PublishPipelineArtifact@1
+    displayName: Publish release git bundle artifact
+    inputs:
+      artifactName: git-release
+      targetPath: '$(Build.ArtifactStagingDirectory)/git-release'
