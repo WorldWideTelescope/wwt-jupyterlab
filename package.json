@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "@wwtelescope/jupyterlab": "file:jupyterlab",
-    "@wwtelescope/research-app": "file:research-app"
+    "@wwtelescope/research-app": "file:research-app",
+    "@wwtelescope/research-app-messages": "file:research-app-messages"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.7.0",
