@@ -1,3 +1,5 @@
+/.vs/
+
 dist/
 node_modules/
-/.vs/
+tsconfig.tsbuildinfo
