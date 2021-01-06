@@ -114,16 +114,14 @@ export default class App extends WWTAwareComponent {
 
   // Message handling
 
-  onMessage(data: any) {
-    console.log("message passed filters:");
-    console.log(data);
-
-    if (classicPywwt.isLoadImageCollectionMessage(data)) {
-      console.log("got loadimagecollection");
-    } else if (classicPywwt.isSetBackgroundByNameMessage(data)) {
-      console.log("got setbackgroundbyname");
+  onMessage(msg: any) {
+    if (classicPywwt.isLoadImageCollectionMessage(msg)) {
+      this.loadImageCollection({ url: msg.url });
+    } else if (classicPywwt.isSetBackgroundByNameMessage(msg)) {
+      this.setBackgroundImageByName(msg.name);
     } else {
-      console.log("message was unrecognized");
+      console.log("WWT research app received unrecognized message, as follows:");
+      console.log(msg);
     }
   }
 
