@@ -39,6 +39,17 @@ library.add(faSearchPlus);
 library.add(faSlidersH);
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
+// If postMessages are to be allowed, our creator has to tell us where they'll
+// come from. This only trivially prevents unexpected messages; it of course
+// does nothing about XSS where someone loads us up inside an iframe that they
+// control. This is OK because right now this app has no sense of user logins or
+// other credentials that can be abused.
+const queryParams = new URLSearchParams(window.location.search);
+var allowedOrigin = queryParams.get('origin');
+if (allowedOrigin === null) {
+  console.log("WWT embed: no \"?origin=\" given, so no incoming messages will be allowed")
+}
+
 new Vue({
   store,
   el: "#app",
@@ -46,6 +57,7 @@ new Vue({
     return createElement(App, {
       props: {
         "wwtNamespace": "wwt-research",
+        "allowedOrigin": allowedOrigin,
       }
     });
   }

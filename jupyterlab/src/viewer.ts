@@ -1,3 +1,6 @@
+// Copyright 2020 AAS WorldWide Telescope
+// Licensed under the MIT License
+
 import {
   Kernel,
   KernelManager,
@@ -12,12 +15,21 @@ import {
   Widget
 } from '@lumino/widgets';
 
+// TODO: make runtime configurable
+// XXX: hardcoding "latest"
+const IFRAME_URL: string = "https://web.wwtassets.org/research/latest/";
+
 export class WWTLabViewer extends Widget {
   constructor(targetName: string) {
     super();
 
     this.iframe = document.createElement('iframe');
-    this.iframe.src = '//web.wwtassets.org/research/latest/';  // XXX
+    // Pass our origin so that the iframe can validate the provenance of the
+    // messages that are posted to it. This isn't acceptable for real XSS
+    // prevention, but so long as the research app can't do anything on behalf
+    // of the user (which it can't right now because we don't even have
+    // "users"), that's OK.
+    this.iframe.src = IFRAME_URL + "?origin=" + encodeURIComponent(location.origin);
     this.iframe.style.setProperty('height', '100%', '');
     this.iframe.style.setProperty('width', '100%', '');
     this.node.appendChild(this.iframe);
@@ -60,14 +72,9 @@ export class WWTLabViewer extends Widget {
   }
 
   _onCommMessage(msg: KernelMessage.ICommMsgMsg) {
-    console.log("comm msg");
-    console.log(msg);
-
     const window = this.iframe.contentWindow;
     if (window) {
-      if ((window as any).wwt) {
-        (window as any).wwt_apply_json_message((window as any).wwt, msg.content.data);
-      }
+      window.postMessage(msg.content.data, IFRAME_URL);
     }
   }
 }

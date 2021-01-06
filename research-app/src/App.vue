@@ -85,6 +85,8 @@ const skyBackgroundImagesets: BackgroundImageset[] = [
 
 @Component
 export default class App extends WWTAwareComponent {
+  @Prop({default: null}) readonly allowedOrigin!: string | null;
+
   backgroundImagesets: BackgroundImageset[] = [];
   currentTool: ToolType = null;
   fullscreenModeActive = false;
@@ -150,12 +152,24 @@ export default class App extends WWTAwareComponent {
     if (screenfull.isEnabled) {
       screenfull.on('change', this.onFullscreenEvent);
     }
+
+    // For now let's just not worry about removing this listener ...
+    window.addEventListener('message', (event) => {
+      if (this.allowedOrigin !== null && event.origin == this.allowedOrigin) {
+        this.onMessage(event.data);
+      }
+    }, false);
   }
 
   destroyed() {
     if (screenfull.isEnabled) {
       screenfull.off('change', this.onFullscreenEvent);
     }
+  }
+
+  onMessage(data: any) {
+    console.log("message passed filters:");
+    console.log(data);
   }
 
   selectTool(name: ToolType) {
