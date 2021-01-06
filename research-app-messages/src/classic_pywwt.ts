@@ -13,6 +13,14 @@ export interface LoadImageCollectionMessage {
   url: string;
 }
 
+// As far as I can tell, I have to implement all of these type guard functions manually :-(
+
+/** Type guard function for LoadImageCollectionMessage. */
+export function isLoadImageCollectionMessage(o: any): o is LoadImageCollectionMessage {
+  return typeof o.event === "string" &&
+    o.event == "load_image_collection" &&
+    typeof o.url === "string";
+}
 
 /** A command to select the background imagery to show. */
 export interface SetBackgroundByNameMessage {
@@ -21,6 +29,13 @@ export interface SetBackgroundByNameMessage {
 
   /** The name (partial or complete) of the imageset to use. */
   name: string;
+}
+
+/** Type guard function for SetBackgroundByNameMessage. */
+export function isSetBackgroundByNameMessage(o: any): o is SetBackgroundByNameMessage {
+  return typeof o.event === "string" &&
+    o.event == "set_background_by_name" &&
+    typeof o.name === "string";
 }
 
 export type PywwtMessage =

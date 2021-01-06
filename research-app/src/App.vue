@@ -53,13 +53,13 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Watch } from "vue-property-decorator";
-
 import * as screenfull from "screenfull";
-
+import { Component, Prop, Watch } from "vue-property-decorator";
 import { fmtDegLat, fmtDegLon, fmtHours } from "@wwtelescope/astro";
 import { ImageSetType } from "@wwtelescope/engine-types";
 import { SetupForImagesetOptions, WWTAwareComponent } from "@wwtelescope/engine-vuex";
+
+import { classicPywwt } from "@wwtelescope/research-app-messages";
 
 type ToolType = "crossfade" | "choose-background" | null;
 
@@ -170,6 +170,14 @@ export default class App extends WWTAwareComponent {
   onMessage(data: any) {
     console.log("message passed filters:");
     console.log(data);
+
+    if (classicPywwt.isLoadImageCollectionMessage(data)) {
+      console.log("got loadimagecollection");
+    } else if (classicPywwt.isSetBackgroundByNameMessage(data)) {
+      console.log("got setbackgroundbyname");
+    } else {
+      console.log("message was unrecognized");
+    }
   }
 
   selectTool(name: ToolType) {
