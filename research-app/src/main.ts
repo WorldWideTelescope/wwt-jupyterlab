@@ -45,7 +45,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 // control. This is OK because right now this app has no sense of user logins or
 // other credentials that can be abused.
 const queryParams = new URLSearchParams(window.location.search);
-var allowedOrigin = queryParams.get('origin');
+const allowedOrigin = queryParams.get('origin');
 if (allowedOrigin === null) {
   console.log("WWT embed: no \"?origin=\" given, so no incoming messages will be allowed")
 }
