@@ -87,62 +87,7 @@ const skyBackgroundImagesets: BackgroundImageset[] = [
 export default class App extends WWTAwareComponent {
   @Prop({default: null}) readonly allowedOrigin!: string | null;
 
-  backgroundImagesets: BackgroundImageset[] = [];
-  currentTool: ToolType = null;
-  fullscreenModeActive = false;
-
-  get coordText() {
-    if (this.wwtRenderType == ImageSetType.sky) {
-      return `${fmtHours(this.wwtRARad)} ${fmtDegLat(this.wwtDecRad)}`;
-    }
-
-    return `${fmtDegLon(this.wwtRARad)} ${fmtDegLat(this.wwtDecRad)}`;
-  }
-
-  get curBackgroundImagesetName() {
-    if (this.wwtBackgroundImageset == null)
-      return "";
-    return this.wwtBackgroundImageset.get_name();
-  }
-
-  set curBackgroundImagesetName(name: string) {
-    this.setBackgroundImageByName(name);
-  }
-
-  get foregroundOpacity() {
-    return this.wwtForegroundOpacity;
-  }
-
-  set foregroundOpacity(o: number) {
-    this.setForegroundOpacity(o);
-  }
-
-  get fullscreenAvailable() {
-    return screenfull.isEnabled;
-  }
-
-  get showBackgroundChooser() {
-    if (this.wwtIsTourPlaying)
-      return false;
-
-    // TODO: we should wire in choices for other modes!
-    return this.wwtRenderType == ImageSetType.sky;
-  }
-
-  get showCrossfader() {
-    if (this.wwtIsTourPlaying)
-      return false; // maybe show this if tour player is active but not playing?
-
-    if (this.wwtForegroundImageset == null || this.wwtForegroundImageset === undefined)
-      return false;
-
-    return this.wwtForegroundImageset != this.wwtBackgroundImageset;
-  }
-
-  get showToolMenu() {
-    // This should return true if there are any tools to show.
-    return this.showBackgroundChooser || this.showCrossfader;
-  }
+  // Lifecycle management
 
   //created() {
   //  let prom = this.waitForReady();
@@ -167,6 +112,8 @@ export default class App extends WWTAwareComponent {
     }
   }
 
+  // Message handling
+
   onMessage(data: any) {
     console.log("message passed filters:");
     console.log(data);
@@ -180,20 +127,12 @@ export default class App extends WWTAwareComponent {
     }
   }
 
-  selectTool(name: ToolType) {
-    if (this.currentTool == name) {
-      this.currentTool = null;
-    } else {
-      this.currentTool = name;
-    }
-  }
+  // Fullscreening
 
-  doZoom(zoomIn: boolean) {
-    if (zoomIn) {
-      this.zoom(1/1.3);
-    } else {
-      this.zoom(1.3);
-    }
+  fullscreenModeActive = false;
+
+  get fullscreenAvailable() {
+    return screenfull.isEnabled;
   }
 
   toggleFullscreen() {
@@ -207,6 +146,81 @@ export default class App extends WWTAwareComponent {
     // is not necesary in practice here.
     if (screenfull.isEnabled) {
       this.fullscreenModeActive = screenfull.isFullscreen;
+    }
+  }
+
+  // Background / foreground imagesets
+
+  backgroundImagesets: BackgroundImageset[] = [];
+
+  get curBackgroundImagesetName() {
+    if (this.wwtBackgroundImageset == null)
+      return "";
+    return this.wwtBackgroundImageset.get_name();
+  }
+
+  set curBackgroundImagesetName(name: string) {
+    this.setBackgroundImageByName(name);
+  }
+
+  get foregroundOpacity() {
+    return this.wwtForegroundOpacity;
+  }
+
+  set foregroundOpacity(o: number) {
+    this.setForegroundOpacity(o);
+  }
+
+  // "Tools" menu
+
+  currentTool: ToolType = null;
+
+  get showBackgroundChooser() {
+    if (this.wwtIsTourPlaying)
+      return false;
+
+    // TODO: we should wire in choices for other modes!
+    return this.wwtRenderType == ImageSetType.sky;
+  }
+
+  get showCrossfader() {
+    if (this.wwtIsTourPlaying)
+      return false; // maybe show this if tour player is active but not playing?
+
+    if (this.wwtForegroundImageset == null || this.wwtForegroundImageset === undefined)
+      return false;
+
+    return this.wwtForegroundImageset != this.wwtBackgroundImageset;
+  }
+
+  get showToolMenu() {
+    // This should return true if there are any tools to show.
+    return this.showBackgroundChooser || this.showCrossfader;
+  }
+
+  selectTool(name: ToolType) {
+    if (this.currentTool == name) {
+      this.currentTool = null;
+    } else {
+      this.currentTool = name;
+    }
+  }
+
+  // Other chrome
+
+  get coordText() {
+    if (this.wwtRenderType == ImageSetType.sky) {
+      return `${fmtHours(this.wwtRARad)} ${fmtDegLat(this.wwtDecRad)}`;
+    }
+
+    return `${fmtDegLon(this.wwtRARad)} ${fmtDegLat(this.wwtDecRad)}`;
+  }
+
+  doZoom(zoomIn: boolean) {
+    if (zoomIn) {
+      this.zoom(1/1.3);
+    } else {
+      this.zoom(1.3);
     }
   }
 }
@@ -253,21 +267,6 @@ body {
 
 .fade-enter, .fade-leave-to {
   opacity: 0;
-}
-
-.modal {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  z-index: 100;
-
-  color: #FFF;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 #overlays {
@@ -320,40 +319,6 @@ body {
 
   .opacity-range {
     width: 50vw;
-  }
-
-  .clickable {
-    cursor: pointer;
-  }
-}
-
-#credits {
-  position: absolute;
-  z-index: 10;
-  bottom: 0.5rem;
-  right: 1rem;
-  color: #ddd;
-  font-size: 70%;
-
-  p {
-    margin: 0;
-    padding: 0;
-    line-height: 1;
-  }
-
-  a {
-    text-decoration: none;
-    color: #fff;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  img {
-    height: 24px;
-    vertical-align: middle;
-    margin: 2px;
   }
 }
 
