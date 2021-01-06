@@ -26,9 +26,7 @@
   "typedocOptions": {
     "readme": "../docs/research-app-messages-index.md",
     "out": "../docs/static/apiref/research-app-messages",
-    "mode": "library",
     "gaID": "UA-107473046-3",
-    "excludeNotExported": true,
     "excludePrivate": true,
     "listInvalidSymbolLinks": true
   }
