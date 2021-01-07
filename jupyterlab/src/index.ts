@@ -5,15 +5,20 @@ import {
 } from '@jupyterlab/application';
 
 import {
-  ICommandPalette, MainAreaWidget, WidgetTracker
+  ICommandPalette, MainAreaWidget, WidgetTracker,
 } from '@jupyterlab/apputils';
 
 import {
   ILauncher,
 } from '@jupyterlab/launcher';
 
+import {
+  INotebookTracker,
+} from '@jupyterlab/notebook';
+
 import { LabIcon } from '@jupyterlab/ui-components';
 
+import { WWTLabCommManager } from './comms';
 import { WWTLabViewer } from './viewer';
 import WWT_ICON from '../style/icons/wwt.svg';
 
@@ -26,7 +31,7 @@ const wwtIcon = new LabIcon({
 });
 
 class WWTLabExtensionState {
-  constructor(app: JupyterFrontEnd, restorer: ILayoutRestorer) {
+  constructor(app: JupyterFrontEnd, restorer: ILayoutRestorer, notebooks: INotebookTracker) {
     this.app = app;
 
     // Set up to track and restore widget state. Of course we're not correctly
@@ -38,15 +43,18 @@ class WWTLabExtensionState {
       command: OPEN_COMMAND,
       name: () => '@wwtelescope/jupyterlab:research'
     });
+
+    this.commMgr = new WWTLabCommManager('@wwtelescope/jupyterlab:research', notebooks);
   }
 
   private app: JupyterFrontEnd;
   private tracker: WidgetTracker;
+  private commMgr: WWTLabCommManager;
   private widget: MainAreaWidget<WWTLabViewer> | null = null;
 
   onOpenNewViewer() {
     if (this.widget == null) {
-      const content = new WWTLabViewer('@wwtelescope/jupyterlab:research');
+      const content = new WWTLabViewer(this.commMgr);
 
       this.widget = new MainAreaWidget({ content });
       this.widget.id = `@wwtelescope/jupyterlab:research:wwt`;
@@ -70,8 +78,8 @@ class WWTLabExtensionState {
   }
 }
 
-function activate(app: JupyterFrontEnd, palette: ICommandPalette, launcher: ILauncher, restorer: ILayoutRestorer) {
-  let state = new WWTLabExtensionState(app, restorer);
+function activate(app: JupyterFrontEnd, palette: ICommandPalette, launcher: ILauncher, restorer: ILayoutRestorer, notebooks: INotebookTracker) {
+  let state = new WWTLabExtensionState(app, restorer, notebooks);
 
   app.commands.addCommand(OPEN_COMMAND, {
     label: args => (args['isPalette'] ? 'Open AAS WorldWide Telescope Viewer' : 'AAS WorldWide Telescope'),
@@ -96,7 +104,7 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, launcher: ILau
 const extension: JupyterFrontEndPlugin<void> = {
   id: '@wwtelescope/jupyterlab:research',
   autoStart: true,
-  requires: [ICommandPalette, ILauncher, ILayoutRestorer],
+  requires: [ICommandPalette, ILauncher, ILayoutRestorer, INotebookTracker],
   activate: activate,
 };
 
