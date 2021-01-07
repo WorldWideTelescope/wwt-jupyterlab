@@ -45,12 +45,12 @@
 
 <script lang="ts">
 import * as screenfull from "screenfull";
-import { Component, Prop } from "vue-property-decorator";
+import { Component, Prop, Watch } from "vue-property-decorator";
 import { fmtDegLat, fmtDegLon, fmtHours } from "@wwtelescope/astro";
 import { ImageSetType } from "@wwtelescope/engine-types";
 import { WWTAwareComponent } from "@wwtelescope/engine-vuex";
 
-import { classicPywwt } from "@wwtelescope/research-app-messages";
+import { classicPywwt, ViewStateMessage } from "@wwtelescope/research-app-messages";
 
 type ToolType = "crossfade" | null;
 
@@ -60,10 +60,6 @@ export default class App extends WWTAwareComponent {
 
   // Lifecycle management
 
-  //created() {
-  //  let prom = this.waitForReady();
-  //}
-
   mounted() {
     if (screenfull.isEnabled) {
       screenfull.on('change', this.onFullscreenEvent);
@@ -72,6 +68,17 @@ export default class App extends WWTAwareComponent {
     // For now let's just not worry about removing this listener ...
     window.addEventListener('message', (event) => {
       if (this.allowedOrigin !== null && event.origin == this.allowedOrigin) {
+        // You could imagine wanting to send status updates to multiple
+        // destinations, but let's start simple. TypeScript currently requires
+        // us to do an odd type guard here.
+        if (this.statusMessageDestination === null) {
+          if (!(event.source instanceof MessagePort) && !(event.source instanceof ServiceWorker)) {
+            this.statusMessageDestination = event.source;
+            // Hardcode the status update rate to max out at 5 Hz.
+            this.updateIntervalId = window.setInterval(() => this.maybeUpdateStatus(), 200);
+          }
+        }
+
         this.onMessage(event.data);
       }
     }, false);
@@ -81,9 +88,14 @@ export default class App extends WWTAwareComponent {
     if (screenfull.isEnabled) {
       screenfull.off('change', this.onFullscreenEvent);
     }
+
+    if (this.updateIntervalId !== null) {
+      window.clearInterval(this.updateIntervalId);
+      this.updateIntervalId = null;
+    }
   }
 
-  // Message handling
+  // Incoming message handling
 
   onMessage(msg: any) {  // eslint-disable-line @typescript-eslint/no-explicit-any
     if (classicPywwt.isLoadImageCollectionMessage(msg)) {
@@ -95,6 +107,63 @@ export default class App extends WWTAwareComponent {
       console.warn(msg);
     }
   }
+
+  // Outgoing messages
+
+  updateIntervalId: number | null = null;
+  statusMessageDestination: Window | null = null;
+  lastUpdatedRA = 0.0;
+  lastUpdatedDec = 0.0;
+  lastUpdatedFov = 1.0;
+  lastUpdatedClockRate = 1.0;
+  lastUpdatedTimestamp = 0; // `Date.now()` value
+
+  maybeUpdateStatus() {
+    if (this.statusMessageDestination === null || this.allowedOrigin === null)
+      return;
+
+    const ra = this.wwtRARad;
+    const dec = this.wwtDecRad;
+    const fov = this.wwtZoomDeg / 6; // WWT convention, zoom = 6*fov
+    const clockRate = this.wwtClockRate;
+
+    const needUpdate =
+      (ra != this.lastUpdatedRA) ||
+      (dec != this.lastUpdatedDec) ||
+      (fov != this.lastUpdatedFov) ||
+      (clockRate != this.lastUpdatedClockRate) ||
+      (Date.now() - this.lastUpdatedTimestamp) > 60000;
+
+    if (!needUpdate)
+      return;
+
+    const message: ViewStateMessage = {
+      type: "wwt_view_state",
+      raRad: ra,
+      decRad: dec,
+      fovDeg: fov,
+      engineClockISOT: this.wwtCurrentTime.toISOString(),
+      systemClockISOT: new Date().toISOString(),
+      engineClockRateFactor: clockRate,
+    };
+
+    // NB: if we start allowing messages to go out to more destinations, we'll
+    // need to become smarter about allowedOrigin here.
+    this.statusMessageDestination.postMessage(message, this.allowedOrigin);
+
+    this.lastUpdatedRA = ra;
+    this.lastUpdatedDec = dec;
+    this.lastUpdatedFov = fov;
+    this.lastUpdatedClockRate = clockRate;
+    this.lastUpdatedTimestamp = Date.now();
+  }
+
+  @Watch('wwtClockDiscontinuities')
+  onClockDiscontinuitiesChanged(count: number) {
+    // Force a clock update message.
+    this.lastUpdatedTimestamp = 0;
+  }
+
 
   // Fullscreening
 

@@ -11,7 +11,7 @@
     "@wwtelescope/astro": "^0.1",
     "@wwtelescope/engine": "^7.7.0",
     "@wwtelescope/engine-types": "^0.2",
-    "@wwtelescope/engine-vuex": "^0.5.0",
+    "@wwtelescope/engine-vuex": "^0.6.0",
     "@wwtelescope/research-app-messages": "0.0.0-dev.0",
     "screenfull": "^5",
     "v-tooltip": "=2.0.2",
