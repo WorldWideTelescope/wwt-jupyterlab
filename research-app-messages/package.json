@@ -5,13 +5,16 @@
     "url": "https://github.com/WorldWideTelescope/wwt-research-kit/issues"
   },
   "description": "Data structures for messages sent to the AAS WorldWide Telescope research app.",
+  "files": [
+    "dist/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}"
+  ],
   "homepage": "https://worldwidetelescope.org/home/",
   "keywords": [
     "AAS WorldWide Telescope",
     "worldwide-telescope"
   ],
   "license": "MIT",
-  "main": "./src/index.ts",
+  "main": "dist/index.js",
   "name": "@wwtelescope/research-app-messages",
   "publishConfig": {
     "access": "public"
@@ -19,8 +22,10 @@
   "repository": "github:WorldWideTelescope/wwt-research-kit",
   "scripts": {
     "build": "tsc",
+    "clean": "rimraf dist tsconfig.tsbuildinfo",
     "doc": "typedoc src/index.ts",
     "lint": "eslint -c ../.eslintrc.js src --ext .js,.ts"
   },
+  "types": "dist/index.d.ts",
   "version": "0.0.0-dev.0"
 }
