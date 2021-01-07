@@ -60,6 +60,10 @@ export default class App extends WWTAwareComponent {
 
   // Lifecycle management
 
+  created() {
+    this.statusMessageDestination = null;
+  }
+
   mounted() {
     if (screenfull.isEnabled) {
       screenfull.on('change', this.onFullscreenEvent);
@@ -111,7 +115,10 @@ export default class App extends WWTAwareComponent {
   // Outgoing messages
 
   updateIntervalId: number | null = null;
-  statusMessageDestination: Window | null = null;
+  // we need to declare this variable specially to make sure that Vue doesn't
+  // try to make it reactive, which would cause it to try to read fields that
+  // are prohibited in cross-origin situations:
+  private statusMessageDestination!: Window | null;
   lastUpdatedRA = 0.0;
   lastUpdatedDec = 0.0;
   lastUpdatedFov = 1.0;
