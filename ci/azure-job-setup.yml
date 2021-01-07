@@ -75,6 +75,9 @@ steps:
     inputs:
       versionSpec: '>=12'
 
+  - bash: cranko npm lerna-workaround
+    displayName: Fake internal version requirements for Lerna
+
   - bash: npx lerna bootstrap --concurrency=1
     displayName: Lerna NPM setup
 

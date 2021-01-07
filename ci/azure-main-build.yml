@@ -27,7 +27,12 @@ jobs:
     displayName: NPM build
 
   # Create and stage our panoply of artifacts. (No reason not to do this ASAP --
-  # these can help debug build problems.)
+  # these can help debug build problems.) The `git reset` is to revert the
+  # `cranko npm lerna-workaround` (in azure-job-setup.yml) that's needed for the
+  # build to work reliably.
+
+  - bash: git reset --hard release
+    displayName: Undo Lerna-driven internal requirement mods
 
   - bash: npm run pack
     displayName: NPM pack
