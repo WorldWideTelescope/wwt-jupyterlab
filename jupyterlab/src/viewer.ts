@@ -21,6 +21,7 @@ const IFRAME_URL: string = "https://web.wwtassets.org/research/latest/";
 
 export class WWTLabViewer extends Widget {
   private readonly comms: WWTLabCommManager;
+  private iframe: HTMLIFrameElement;
 
   constructor(comms: WWTLabCommManager) {
     super();
@@ -50,16 +51,12 @@ export class WWTLabViewer extends Widget {
     comms.onAnyMessage = this.processCommMessage;
   }
 
-  private iframe: HTMLIFrameElement;
-
   private onIframeMessage(msg: any) {  // eslint-disable-line @typescript-eslint/no-explicit-any
-    console.log("ZZ iframe got message!");
     if (isViewStateMessage(msg)) {
       // Relay to the client kernel so it knows what's going on.
       this.comms.broadcastMessage(msg as any);  // eslint-disable-line @typescript-eslint/no-explicit-any
     } else {
-      console.warn('WWT JupyterLab viewer got unexpected message from app, as follows:');
-      console.warn(msg);
+      console.warn('WWT JupyterLab viewer got unexpected message from app, as follows:', msg);
     }
   }
 

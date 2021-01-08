@@ -52,6 +52,8 @@ import { WWTAwareComponent } from "@wwtelescope/engine-vuex";
 
 import { classicPywwt, ViewStateMessage } from "@wwtelescope/research-app-messages";
 
+const D2R = Math.PI / 180.0;
+
 type ToolType = "crossfade" | null;
 
 @Component
@@ -105,10 +107,26 @@ export default class App extends WWTAwareComponent {
     if (classicPywwt.isLoadImageCollectionMessage(msg)) {
       this.loadImageCollection({ url: msg.url });
     } else if (classicPywwt.isSetBackgroundByNameMessage(msg)) {
+      console.log("ZZ bg by name:", msg);
       this.setBackgroundImageByName(msg.name);
+    } else if (classicPywwt.isSetForegroundByNameMessage(msg)) {
+      console.log("ZZ fg by name:", msg);
+      this.setForegroundImageByName(msg.name);
+    } else if (classicPywwt.isSetViewerModeMessage(msg)) {
+      this.setBackgroundImageByName(msg.mode);
+      this.setForegroundImageByName(msg.mode);
+    } else if (classicPywwt.isSetForegroundOpacityMessage(msg)) {
+      console.log("ZZ foreground opac:", msg);
+      this.setForegroundOpacity(msg.value);
+    } else if (classicPywwt.isCenterOnCoordinatesMessage(msg)) {
+      this.gotoRADecZoom({
+        raRad: msg.ra * D2R,
+        decRad: msg.dec * D2R,
+        zoomDeg: msg.fov, // TODO: make sure we're not off by a factor of 6 here
+        instant: msg.instant,
+      });
     } else {
-      console.warn("WWT research app received unrecognized message, as follows:");
-      console.warn(msg);
+      console.warn("WWT research app received unrecognized message, as follows:", msg);
     }
   }
 
