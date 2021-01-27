@@ -20,7 +20,8 @@ This extension supports:
 
 ## Installation
 
-In principle, all you need to do is:
+If you’ve got JupyterLab all set up, you don’t even need to download the source
+code. All you need to do is:
 
 ```bash
 $ jupyter labextension install @wwtelescope/jupyterlab
@@ -31,6 +32,12 @@ There is a `jupyter labextension uninstall` command to remove the extension.
 
 ## Development
 
+Since this repo contains a JupyterLab extension, the primary build interface is
+using the [jlpm] command, which is JupyterLab’s bundled version of [yarn].
+
+[jlpm]: https://jupyterlab.readthedocs.io/en/stable/extension/extension_tutorial.html
+[yarn]: https://yarnpkg.com/
+
 Some useful commands are as follows:
 
 ```bash
@@ -38,6 +45,9 @@ $ jupyter labextension install .  # link your development version of the extensi
 $ jupyter lab build  # Rebuild JupyterLab after making any changes
 $ jlpm watch  # Auto-rebuild sources (long-running)
 $ jupyter lab --watch  # Run JupyterLab, auto-reloading changed extensions (long-running)
+
+$ jlpm run build  # build locally
+$ jlpm add ${npm_package_name}  # add a dep
 ```
 
 
