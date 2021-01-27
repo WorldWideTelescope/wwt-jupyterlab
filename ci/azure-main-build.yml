@@ -3,11 +3,6 @@
 
 # Main build stage.
 
-parameters:
-- name: 'zolaVersion'
-  default: '0.12.2'
-  type: string
-
 jobs:
 
 # Linux build, which publishes the main artifacts
@@ -23,24 +18,29 @@ jobs:
 
   # Build
 
-  - bash: npm run build
-    displayName: NPM build
+  - bash: |
+      set -euo pipefail
+      source activate-conda.sh
+      conda activate build
+      set -x
+      jlpm install
+    displayName: jlpm install
 
-  # Create and stage our panoply of artifacts. (No reason not to do this ASAP --
-  # these can help debug build problems.) The `git reset` is to revert the
-  # `cranko npm lerna-workaround` (in azure-job-setup.yml) that's needed for the
-  # build to work reliably.
+  # Create and stage our artifacts. (No reason not to do this ASAP -- these can
+  # help debug build problems.)
 
-  - bash: git reset --hard release
-    displayName: Undo Lerna-driven internal requirement mods
-
-  - bash: npm run pack
-    displayName: NPM pack
+  - bash: |
+      set -euo pipefail
+      source activate-conda.sh
+      conda activate build
+      set -x
+      jlpm pack
+    displayName: jlpm pack
 
   - bash: |
       set -xeuo pipefail
       mkdir -p $ARTIFACT_STAGING/npm
-      cp */*.tgz $ARTIFACT_STAGING/npm
+      cp *.tgz $ARTIFACT_STAGING/npm
     displayName: Stage NPM package artifacts
 
   - task: PublishPipelineArtifact@0
@@ -49,22 +49,15 @@ jobs:
       artifactName: npm
       targetPath: $(Build.ArtifactStagingDirectory)/npm
 
-  - task: CopyFiles@2
-    displayName: Stage research-app artifacts
-    inputs:
-      sourceFolder: research-app/dist
-      targetFolder: $(Build.ArtifactStagingDirectory)/research-app
-
-  - task: PublishPipelineArtifact@0
-    displayName: Publish research-app artifacts
-    inputs:
-      artifactName: research-app
-      targetPath: $(Build.ArtifactStagingDirectory)/research-app
-
   # Test
 
-  - bash: npm run test
-    displayName: NPM test
+  - bash: |
+      set -euo pipefail
+      source activate-conda.sh
+      conda activate build
+      set -x
+      jlpm run test
+    displayName: jlpm test
 
 
 # MacOS - build/test but no artifacts
@@ -77,11 +70,21 @@ jobs:
     parameters:
       setupBuild: true
 
-  - bash: npm run build
-    displayName: NPM build
+  - bash: |
+      set -euo pipefail
+      source activate-conda.sh
+      conda activate build
+      set -x
+      jlpm install
+    displayName: jlpm install
 
-  - bash: npm run test
-    displayName: NPM test
+  - bash: |
+      set -euo pipefail
+      source activate-conda.sh
+      conda activate build
+      set -x
+      jlpm run test
+    displayName: jlpm test
 
 
 # Lint
@@ -94,52 +97,18 @@ jobs:
     parameters:
       setupBuild: true
 
-  - bash: npm run build
-    displayName: NPM build
-
-  - bash: npm run lint
-    displayName: NPM lint
-
-# Docs
-
-- job: docs
-  pool:
-    vmImage: ubuntu-20.04
-
-  steps:
-  - template: azure-job-setup.yml
-    parameters:
-      setupBuild: true
-
-  - bash: npm run build
-    displayName: NPM build
-
-  - script: npm run doc
-    displayName: NPM doc
+  - bash: |
+      set -euo pipefail
+      source activate-conda.sh
+      conda activate build
+      set -x
+      jlpm install
+    displayName: jlpm install
 
   - bash: |
-      set -xeuo pipefail
-      fn="zola-v${{ parameters.zolaVersion }}-x86_64-unknown-linux-gnu.tar.gz"
-      u="https://github.com/getzola/zola/releases/download/v${{ parameters.zolaVersion }}/$fn"
-      wget "$u"
-      tar xzf "$fn"
-      rm -rf "$fn"
-    displayName: Install Zola
-
-  - bash: |
-      set -xeuo pipefail
-      cd docs
-      ../zola check
-    displayName: Check Zola docs site
-
-  - bash: |
-      set -xeuo pipefail
-      cd docs
-      ../zola build -o $ARTIFACT_STAGING/docs
-    displayName: Zola docs build
-
-  - task: PublishPipelineArtifact@0
-    displayName: Publish docs artifacts
-    inputs:
-      artifactName: docs
-      targetPath: $(Build.ArtifactStagingDirectory)/docs
+      set -euo pipefail
+      source activate-conda.sh
+      conda activate build
+      set -x
+      jlpm run eslint:check
+    displayName: jlpm eslint

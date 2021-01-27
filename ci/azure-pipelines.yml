@@ -16,8 +16,9 @@ stages:
   jobs:
   - template: azure-main-build.yml
 
+# Note: no CD activities (i.e. things that happen on updates to `master`)
 - stage: Deploy
-  condition: and(succeeded('MainBuild'), ne(variables['build.reason'], 'PullRequest'))
+  condition: and(succeeded('MainBuild'), ne(variables['build.reason'], 'PullRequest'), eq(variables['Build.SourceBranchName'], 'rc'))
   jobs:
   - template: azure-deployment.yml
     parameters:
