@@ -10,6 +10,7 @@ import {
 } from '@lumino/widgets';
 
 import {
+  classicPywwt,
   isViewStateMessage,
 } from '@wwtelescope/research-app-messages';
 
@@ -63,6 +64,7 @@ export class WWTLabViewer extends Widget {
   private readonly processCommMessage = (d: JSONObject) => {
     const window = this.iframe.contentWindow;
     if (window) {
+      classicPywwt.applyBaseUrlIfApplicable(d, location.toString());
       window.postMessage(d, IFRAME_URL);
     }
   };
