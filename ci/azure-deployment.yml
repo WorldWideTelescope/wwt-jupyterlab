@@ -11,6 +11,13 @@ parameters:
 
 jobs:
 
+- ${{ if parameters.isMainDev }}:
+  - job: dummy_setup_only
+    pool:
+      vmImage: ubuntu-20.04
+    steps:
+    - template: azure-job-setup.yml
+
 # Deployment jobs that should only happen on updates to `rc`, i.e.
 # primary releases.
 

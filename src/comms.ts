@@ -12,24 +12,13 @@
  * work.
  */
 
-import {
-  JSONObject,
-} from '@lumino/coreutils';
+import { JSONObject } from '@lumino/coreutils';
 
-import {
-  ISessionContext,
-} from '@jupyterlab/apputils';
+import { ISessionContext } from '@jupyterlab/apputils';
 
-import {
-  INotebookTracker,
-  NotebookPanel,
-} from '@jupyterlab/notebook';
+import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
 
-import {
-  Kernel,
-  KernelMessage,
-  Session,
-} from '@jupyterlab/services';
+import { Kernel, KernelMessage, Session } from '@jupyterlab/services';
 
 export class WWTLabCommManager {
   private readonly targetName: string;
@@ -37,19 +26,27 @@ export class WWTLabCommManager {
 
   constructor(targetName: string, notebooks: INotebookTracker) {
     this.targetName = targetName;
-    notebooks.widgetAdded.connect((_: INotebookTracker, np: NotebookPanel) => this.monitorPanel(np));
+    notebooks.widgetAdded.connect((_: INotebookTracker, np: NotebookPanel) =>
+      this.monitorPanel(np)
+    );
     notebooks.forEach(this.monitorPanel);
   }
 
-  private readonly monitorPanel = (panel: NotebookPanel) => {
+  private readonly monitorPanel = (panel: NotebookPanel): void => {
     panel.sessionContext.kernelChanged.connect(this.onKernelChanged);
 
     if (panel.sessionContext.session !== null) {
-      panel.sessionContext.session.kernel.registerCommTarget(this.targetName, this.onCommOpened);
+      panel.sessionContext.session.kernel.registerCommTarget(
+        this.targetName,
+        this.onCommOpened
+      );
     }
   };
 
-  private readonly onKernelChanged = (_: ISessionContext, {oldValue, newValue}: Session.ISessionConnection.IKernelChangedArgs) => {
+  private readonly onKernelChanged = (
+    _: ISessionContext,
+    { oldValue, newValue }: Session.ISessionConnection.IKernelChangedArgs
+  ): void => {
     if (oldValue !== null) {
       oldValue.removeCommTarget(this.targetName, this.onCommOpened);
     }
@@ -59,24 +56,27 @@ export class WWTLabCommManager {
     }
   };
 
-  private readonly onCommOpened = (comm: Kernel.IComm, msg: KernelMessage.ICommOpenMsg) => {
-    if (msg.content.target_name == this.targetName) {
+  private readonly onCommOpened = (
+    comm: Kernel.IComm,
+    msg: KernelMessage.ICommOpenMsg
+  ): void => {
+    if (msg.content.target_name === this.targetName) {
       this.activeComms.set(comm.commId, comm);
       comm.onMsg = this.onCommMessage;
-      comm.onClose = (msg: KernelMessage.ICommCloseMsg) => {
+      comm.onClose = (msg: KernelMessage.ICommCloseMsg): void => {
         this.activeComms.delete(comm.commId);
-      }
+      };
     }
   };
 
-  private readonly onCommMessage = (msg: KernelMessage.ICommMsgMsg) => {
+  private readonly onCommMessage = (msg: KernelMessage.ICommMsgMsg): void => {
     this.onAnyMessage(msg.content.data);
-  }
+  };
 
   // intentionally modifiable -- this is how one signs up for notifications
-  public onAnyMessage = (d: JSONObject) => {};
+  public onAnyMessage = (d: JSONObject): void => {}; // eslint-disable-line @typescript-eslint/no-empty-function
 
-  public broadcastMessage(d: JSONObject) {
+  public broadcastMessage(d: JSONObject): void {
     this.activeComms.forEach((comm: Kernel.IComm) => {
       comm.send(d);
     });
