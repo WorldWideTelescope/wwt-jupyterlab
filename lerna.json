@@ -1,8 +1,6 @@
 {
   "packages": [
-    "jupyterlab",
-    "research-app",
-    "research-app-messages"
+    "jupyterlab"
   ],
   "version": "independent",
   "npmClient": "npm",

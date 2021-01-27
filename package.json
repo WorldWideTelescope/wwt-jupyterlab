@@ -10,20 +10,12 @@
     "serve-app": "cd research-app && npm run serve"
   },
   "dependencies": {
-    "@wwtelescope/jupyterlab": "file:jupyterlab",
-    "@wwtelescope/research-app": "file:research-app",
-    "@wwtelescope/research-app-messages": "file:research-app-messages"
+    "@wwtelescope/jupyterlab": "file:jupyterlab"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.7.0",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",
-    "@vue/cli-plugin-eslint": "~4.3.0",
-    "@vue/cli-plugin-typescript": "~4.3.0",
-    "@vue/cli-plugin-vuex": "~4.3.0",
-    "@vue/cli-service": "~4.3.0",
-    "@vue/eslint-config-typescript": "^5.0.2",
-    "@vue/test-utils": "1.0.0-beta.31",
     "copyfiles": "^2.2.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.10.1",
@@ -39,10 +31,6 @@
     "sass-loader": "^8.0.2",
     "typedoc": "^0.20",
     "typescript": "~3.9",
-    "uglify-js": "^3.9.1",
-    "vue-class-component": "^7.2.3",
-    "vue-property-decorator": "^8.4.1",
-    "vue-template-compiler": "^2.6.11",
-    "vuex-module-decorators": "^0.16.1"
+    "uglify-js": "^3.9.1"
   }
 }
