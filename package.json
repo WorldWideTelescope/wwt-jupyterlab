@@ -2,7 +2,7 @@
   "author": "The AAS WorldWide Telescope Team <wwt@aas.org>",
   "bugs": {
     "email": "wwt@aas.org",
-    "url": "https://github.com/WorldWideTelescope/wwt-research-kit/issues"
+    "url": "https://github.com/WorldWideTelescope/wwt-jupyterlab/issues"
   },
   "dependencies": {
     "@jupyterlab/application": "^2.2.6 || ^3.0.0",
@@ -40,7 +40,7 @@
     "dist/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
     "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}"
   ],
-  "homepage": "https://github.com/WorldWideTelescope/wwt-research-kit",
+  "homepage": "https://github.com/WorldWideTelescope/wwt-jupyterlab",
   "jupyterlab": {
     "extension": true
   },
@@ -54,7 +54,7 @@
   "name": "@wwtelescope/jupyterlab",
   "repository": {
     "type": "git",
-    "url": "https://github.com/WorldWideTelescope/wwt-research-kit.git"
+    "url": "https://github.com/WorldWideTelescope/wwt-jupyterlab.git"
   },
   "scripts": {
     "build": "tsc",
