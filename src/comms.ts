@@ -77,8 +77,20 @@ export class WWTLabCommManager {
   public onAnyMessage = (d: JSONObject): void => {}; // eslint-disable-line @typescript-eslint/no-empty-function
 
   public broadcastMessage(d: JSONObject): void {
+    let toRemove: string[] = [];
+
     this.activeComms.forEach((comm: Kernel.IComm) => {
-      comm.send(d);
+      try {
+        comm.send(d);
+      } catch {
+        // We can get errors when kernels go away. AFAICT the most
+        // robust approach is to deal with this here.
+        toRemove.push(comm.commId);
+      }
+    });
+
+    toRemove.forEach((id: string) => {
+      this.activeComms.delete(id);
     });
   }
 }
