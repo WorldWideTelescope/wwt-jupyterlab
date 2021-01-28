@@ -77,7 +77,7 @@ export class WWTLabCommManager {
   public onAnyMessage = (d: JSONObject): void => {}; // eslint-disable-line @typescript-eslint/no-empty-function
 
   public broadcastMessage(d: JSONObject): void {
-    let toRemove: string[] = [];
+    const toRemove: string[] = [];
 
     this.activeComms.forEach((comm: Kernel.IComm) => {
       try {
