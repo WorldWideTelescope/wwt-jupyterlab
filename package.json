@@ -62,6 +62,7 @@
     "eslint": "eslint . --ext .ts,.tsx --fix",
     "eslint:check": "eslint . --ext .ts,.tsx",
     "prepare": "npm run clean && npm run build",
+    "test": "echo TODO",
     "watch": "tsc -w"
   },
   "sideEffects": [
