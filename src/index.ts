@@ -5,28 +5,35 @@ import {
 } from '@jupyterlab/application';
 
 import {
-  ICommandPalette, MainAreaWidget, WidgetTracker
+  ICommandPalette,
+  MainAreaWidget,
+  WidgetTracker
 } from '@jupyterlab/apputils';
 
-import {
-  ILauncher,
-} from '@jupyterlab/launcher';
+import { ILauncher } from '@jupyterlab/launcher';
+
+import { INotebookTracker } from '@jupyterlab/notebook';
 
 import { LabIcon } from '@jupyterlab/ui-components';
 
+import { WWTLabCommManager } from './comms';
 import { WWTLabViewer } from './viewer';
 import WWT_ICON from '../style/icons/wwt.svg';
 
-const CATEGORY: string = 'AAS WorldWide Telescope';
-const OPEN_COMMAND: string = 'wwtelescope:open';
+const CATEGORY = 'AAS WorldWide Telescope';
+const OPEN_COMMAND = 'wwtelescope:open';
 
 const wwtIcon = new LabIcon({
   name: '@wwtelescope/jupyterlab:research:wwt',
-  svgstr: WWT_ICON,
+  svgstr: WWT_ICON
 });
 
 class WWTLabExtensionState {
-  constructor(app: JupyterFrontEnd, restorer: ILayoutRestorer) {
+  constructor(
+    app: JupyterFrontEnd,
+    restorer: ILayoutRestorer,
+    notebooks: INotebookTracker
+  ) {
     this.app = app;
 
     // Set up to track and restore widget state. Of course we're not correctly
@@ -38,19 +45,25 @@ class WWTLabExtensionState {
       command: OPEN_COMMAND,
       name: () => '@wwtelescope/jupyterlab:research'
     });
+
+    this.commMgr = new WWTLabCommManager(
+      '@wwtelescope/jupyterlab:research',
+      notebooks
+    );
   }
 
   private app: JupyterFrontEnd;
   private tracker: WidgetTracker;
+  private commMgr: WWTLabCommManager;
   private widget: MainAreaWidget<WWTLabViewer> | null = null;
 
-  onOpenNewViewer() {
-    if (this.widget == null) {
-      const content = new WWTLabViewer('@wwtelescope/jupyterlab:research');
+  onOpenNewViewer(): void {
+    if (this.widget === null) {
+      const content = new WWTLabViewer(this.commMgr);
 
       this.widget = new MainAreaWidget({ content });
-      this.widget.id = `@wwtelescope/jupyterlab:research:wwt`;
-      this.widget.title.label = `AAS WorldWide Telescope`;
+      this.widget.id = '@wwtelescope/jupyterlab:research:wwt';
+      this.widget.title.label = 'AAS WorldWide Telescope';
       this.widget.title.icon = wwtIcon;
       this.widget.title.closable = true;
       this.widget.disposed.connect(() => {
@@ -70,24 +83,33 @@ class WWTLabExtensionState {
   }
 }
 
-function activate(app: JupyterFrontEnd, palette: ICommandPalette, launcher: ILauncher, restorer: ILayoutRestorer) {
-  let state = new WWTLabExtensionState(app, restorer);
+function activate(
+  app: JupyterFrontEnd,
+  palette: ICommandPalette,
+  launcher: ILauncher,
+  restorer: ILayoutRestorer,
+  notebooks: INotebookTracker
+): void {
+  const state = new WWTLabExtensionState(app, restorer, notebooks);
 
   app.commands.addCommand(OPEN_COMMAND, {
-    label: args => (args['isPalette'] ? 'Open AAS WorldWide Telescope Viewer' : 'AAS WorldWide Telescope'),
+    label: args =>
+      args['isPalette']
+        ? 'Open AAS WorldWide Telescope Viewer'
+        : 'AAS WorldWide Telescope',
     caption: 'Open the AAS WorldWide Telescope viewer',
     icon: wwtIcon,
     iconClass: args => (args['isPalette'] ? '' : 'jp-TerminalIcon'),
-    execute: state.onOpenNewViewer.bind(state),
+    execute: state.onOpenNewViewer.bind(state)
   });
 
-  palette.addItem({command: OPEN_COMMAND, category: CATEGORY});
+  palette.addItem({ command: OPEN_COMMAND, category: CATEGORY });
 
   launcher.add({
     command: OPEN_COMMAND,
     category: 'Other',
-    rank: 1,
-  })
+    rank: 1
+  });
 }
 
 /**
@@ -96,8 +118,8 @@ function activate(app: JupyterFrontEnd, palette: ICommandPalette, launcher: ILau
 const extension: JupyterFrontEndPlugin<void> = {
   id: '@wwtelescope/jupyterlab:research',
   autoStart: true,
-  requires: [ICommandPalette, ILauncher, ILayoutRestorer],
-  activate: activate,
+  requires: [ICommandPalette, ILauncher, ILayoutRestorer, INotebookTracker],
+  activate: activate
 };
 
 export default extension;

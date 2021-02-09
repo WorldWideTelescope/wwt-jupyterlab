@@ -75,11 +75,39 @@ steps:
     inputs:
       versionSpec: '>=12'
 
-  - bash: cranko npm lerna-workaround
-    displayName: Fake internal version requirements for Lerna
+  - bash: |
+      set -euo pipefail
 
-  - bash: npx lerna bootstrap --concurrency=1
-    displayName: Lerna NPM setup
+      if [[ $AGENT_OS == Windows_NT ]] ; then
+        CONDA=$(echo "$CONDA" | sed -e 's|\\|\/|g' -e 's|^\([A-Za-z]\)\:/\(.*\)|/\L\1\E/\2|')
+        condabin="$CONDA/Scripts"
+      else
+        condabin="$CONDA/bin"
+      fi
+
+      if [[ $AGENT_OS == Darwin ]] ; then
+        sudo chown -R $USER $CONDA
+      fi
+
+      cat >activate-conda.sh <<EOF
+      eval "\$($condabin/conda shell.bash hook)"
+      conda activate
+      EOF
+    displayName: Set up Conda activation
+
+  - bash: |
+      set -euo pipefail
+      source activate-conda.sh
+      set -x
+      conda config --add channels conda-forge
+    displayName: Activate conda-forge
+
+  - bash: |
+      set -euo pipefail
+      source activate-conda.sh
+      set -x
+      \conda create -y -n build python=3.9 jupyterlab
+    displayName: Create JupyterLab build environment
 
 - ${{ if parameters.setupGit }}:
   - bash: |

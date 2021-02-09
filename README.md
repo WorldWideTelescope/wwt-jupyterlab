@@ -1,43 +1,54 @@
-[![Build Status](https://dev.azure.com/aasworldwidetelescope/WWT/_apis/build/status/WorldWideTelescope.wwt-research-kit?branchName=master)](https://dev.azure.com/aasworldwidetelescope/WWT/_build/latest?definitionId=24&branchName=master)
+[![Build Status](https://dev.azure.com/aasworldwidetelescope/WWT/_apis/build/status/WorldWideTelescope.wwt-jupyterlab?branchName=master)](https://dev.azure.com/aasworldwidetelescope/WWT/_build/latest?definitionId=24&branchName=master)
 
-# AAS WorldWide Telescope Research Kit
+# `@wwtelescope/jupyterlab`
 
-This repository contains the code for the [AAS] [WorldWide Telescope][wwt-home]
-(WWT) research user interface, and supporting systems. Learn more about WWT
-[here][wwt-home].
+[AAS] [WorldWide Telescope][wwt-home] (WWT) inside [JupyterLab]. Learn more
+about WWT [here][wwt-home].
 
 [AAS]: https://aas.org/
 [wwt-home]: https://worldwidetelescope.org/home/
+[JupyterLab]: https://jupyterlab.readthedocs.io/
 
 
-## Developers’ quick start
+## Requirements
 
-1. Check out this repository to a machine with [Node.js] and [npm].
-1. `git submodule update --init`
-1. `npx lerna bootstrap`
-1. `npm run build` creates:
+This extension supports:
 
-[Node.js]: https://nodejs.org/en/
-[npm]: https://www.npmjs.com/get-npm
+- The JupyterLab 2.x series
+- The JupyterLab 3.x series
 
-This repository is a [monorepo] containing the source for several interlocking
-TypeScript packages. README files inside the individual subdirectories give more
-information about their contents and development workflows. The multi-package
-structure of this repository is dealt with using [Lerna].
 
-[monorepo]: https://en.wikipedia.org/wiki/Monorepo
-[Lerna]: https://lerna.js.org/
+## Installation
 
-Running NPM command from inside package subdirectories unfortunately *will not*
-work due to the centralized `node_modules` directory we use with Lerna. To run
-the `lint` command only for the `research-app` submodule, run:
+If you’ve got JupyterLab all set up, you don’t even need to download the source
+code. All you need to do is:
 
-```
-npx lerna run --scope @wwtelescope/research-app lint
+```bash
+$ jupyter labextension install @wwtelescope/jupyterlab
 ```
 
-(The `--scope` argument can be a glob expression if you want to run on a subset
-of packages.)
+There is a `jupyter labextension uninstall` command to remove the extension.
+
+
+## Development
+
+Since this repo contains a JupyterLab extension, the primary build interface is
+using the [jlpm] command, which is JupyterLab’s bundled version of [yarn].
+
+[jlpm]: https://jupyterlab.readthedocs.io/en/stable/extension/extension_tutorial.html
+[yarn]: https://yarnpkg.com/
+
+Some useful commands are as follows:
+
+```bash
+$ jupyter labextension install .  # link your development version of the extension with JupyterLab
+$ jupyter lab build  # Rebuild JupyterLab after making any changes
+$ jlpm watch  # Auto-rebuild sources (long-running)
+$ jupyter lab --watch  # Run JupyterLab, auto-reloading changed extensions (long-running)
+
+$ jlpm run build  # build locally
+$ jlpm add ${npm_package_name}  # add a dep
+```
 
 
 ## Continuous Integration and Deployment
