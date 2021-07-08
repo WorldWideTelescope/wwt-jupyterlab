@@ -10,6 +10,8 @@ import {
   WidgetTracker
 } from '@jupyterlab/apputils';
 
+import { PageConfig } from '@jupyterlab/coreutils';
+
 import { ILauncher } from '@jupyterlab/launcher';
 
 import { INotebookTracker } from '@jupyterlab/notebook';
@@ -50,6 +52,17 @@ class WWTLabExtensionState {
       '@wwtelescope/jupyterlab:research',
       notebooks
     );
+
+    // Check whether the WWT Kernel Data Relay server extension is installed.
+    // We'll pass this information to kernels so that they can give the user
+    // guidance about what features are available.
+
+    const baseUrl = PageConfig.getBaseUrl();
+    const url = baseUrl + 'wwtkdr/_probe';
+
+    fetch(url).then((response: Response) => {
+      this.commMgr.dataRelayConfirmedAvailable = response.ok;
+    });
   }
 
   private app: JupyterFrontEnd;
