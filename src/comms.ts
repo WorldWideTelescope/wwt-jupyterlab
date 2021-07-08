@@ -32,6 +32,8 @@ export class WWTLabCommManager {
     notebooks.forEach(this.monitorPanel);
   }
 
+  public dataRelayConfirmedAvailable = false;
+
   private readonly monitorPanel = (panel: NotebookPanel): void => {
     panel.sessionContext.kernelChanged.connect(this.onKernelChanged);
 
@@ -66,6 +68,17 @@ export class WWTLabCommManager {
       comm.onClose = (msg: KernelMessage.ICommCloseMsg): void => {
         this.activeComms.delete(comm.commId);
       };
+
+      // Send some startup information to the kernel.
+      try {
+        comm.send({
+          type: 'wwt_jupyter_startup_info',
+          dataRelayConfirmedAvailable: this.dataRelayConfirmedAvailable
+        });
+      } catch {
+        // Insta-death, I guess?
+        this.activeComms.delete(comm.commId);
+      }
     }
   };
 
