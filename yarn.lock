@@ -693,10 +693,10 @@
     semver "^7.3.2"
     tsutils "^3.17.1"
 
-"@wwtelescope/research-app-messages@^0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@wwtelescope/research-app-messages/-/research-app-messages-0.7.0.tgz#aee6cf468cd72c9dce0c93276fcbd31ceaf343a1"
-  integrity sha512-oJz1Bci8JRjcObRaetZJk7/oFQONaN67zqIZwUqf+gUaRTV2N4rg03ZbW/fLvuIu4jitIsITLlB2SGzxImwD1Q==
+"@wwtelescope/research-app-messages@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@wwtelescope/research-app-messages/-/research-app-messages-0.7.1.tgz#7b2e5cb915bc151970423e3d2383e3aeddf8e8a0"
+  integrity sha512-BG7joZMgfmJDYoxcjT+Qkqdrjh0ZEEbIRyEYOHd9GiCq1ji2BUx3V9G6UmCk54zwITmhgVvcVZNMKIRGgttLaQ==
 
 acorn-jsx@^5.2.0:
   version "5.3.2"
