@@ -5,10 +5,7 @@ import { JSONObject } from '@lumino/coreutils';
 
 import { Widget } from '@lumino/widgets';
 
-import {
-  classicPywwt,
-  isViewStateMessage
-} from '@wwtelescope/research-app-messages';
+import { classicPywwt } from '@wwtelescope/research-app-messages';
 
 import { WWTLabCommManager } from './comms';
 
@@ -55,15 +52,7 @@ export class WWTLabViewer extends Widget {
 
   private onIframeMessage(msg: any): void {
     // eslint-disable-line @typescript-eslint/no-explicit-any
-    if (isViewStateMessage(msg)) {
-      // Relay to the client kernel so it knows what's going on.
-      this.comms.broadcastMessage(msg as any); // eslint-disable-line @typescript-eslint/no-explicit-any
-    } else {
-      console.warn(
-        'WWT JupyterLab viewer got unexpected message from app, as follows:',
-        msg
-      );
-    }
+    this.comms.broadcastMessage(msg as any); // eslint-disable-line @typescript-eslint/no-explicit-any
   }
 
   private readonly processCommMessage = (d: JSONObject): void => {
