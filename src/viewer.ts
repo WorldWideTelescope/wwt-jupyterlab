@@ -34,6 +34,8 @@ export class WWTLabViewer extends Widget {
       false
     );
 
+    this.comms = comms;
+
     this.iframe = document.createElement('iframe');
     // Pass our origin so that the iframe can validate the provenance of the
     // messages that are posted to it. This isn't acceptable for real XSS
@@ -44,10 +46,15 @@ export class WWTLabViewer extends Widget {
       IFRAME_URL + '?origin=' + encodeURIComponent(location.origin);
     this.iframe.style.setProperty('height', '100%', '');
     this.iframe.style.setProperty('width', '100%', '');
-    this.node.appendChild(this.iframe);
 
-    this.comms = comms;
-    comms.onAnyMessage = this.processCommMessage;
+    // Don't start trying to process messages until the iframe is loaded.
+    // Otherwise we can get an error where our postMessage goes to the wrong
+    // place.
+    this.iframe.addEventListener('load', () => {
+      comms.onAnyMessage = this.processCommMessage;
+    });
+
+    this.node.appendChild(this.iframe);
   }
 
   private onIframeMessage(msg: any): void {
