@@ -93,6 +93,7 @@ export class WWTLabCommManager {
       // Send some startup information to the kernel.
       try {
         comm.send({
+          content: { _pywwtExpedite: true },
           type: 'wwt_jupyter_startup_info',
           dataRelayConfirmedAvailable: this.dataRelayConfirmedAvailable
         });
@@ -128,6 +129,9 @@ export class WWTLabCommManager {
 
       return;
     }
+
+    d = Object.assign({ content: {} }, d);
+    (d['content'] as any)['_pywwtExpedite'] = true; // eslint-disable-line @typescript-eslint/no-explicit-any
 
     // OK, this is a generic message.
 
@@ -171,6 +175,7 @@ export class WWTLabCommManager {
 
     const toRemove: string[] = [];
     const msg = {
+      content: { _pywwtExpedite: true },
       type: 'wwt_jupyter_viewer_status',
       alive: appAlive
     };
