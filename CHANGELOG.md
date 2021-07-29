@@ -1,4 +1,10 @@
-# rc: minor bump
+# rc: micro bump
+
+The 1.1.0 release accidentally contained a local hack that made it not work at
+all. Fix that. (#5, @pkgw)
+
+
+# @wwtelescope/jupyterlab 1.1.0 (2021-07-23)
 
 - Relay *all* messages, with the appropriate origin, to clients. This is
   essential to allow bidirectional data flow between clients and the app, such

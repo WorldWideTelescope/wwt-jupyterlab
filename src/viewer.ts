@@ -11,8 +11,7 @@ import { WWTLabCommManager } from './comms';
 
 // TODO: make runtime configurable
 // XXX: hardcoding "latest"
-//const IFRAME_URL = 'https://web.wwtassets.org/research/latest/';
-const IFRAME_URL = 'http://localhost:8080/';
+const IFRAME_URL = 'https://web.wwtassets.org/research/latest/';
 
 export class WWTLabViewer extends Widget {
   private readonly comms: WWTLabCommManager;
