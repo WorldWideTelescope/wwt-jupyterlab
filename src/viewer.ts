@@ -47,6 +47,14 @@ export class WWTLabViewer extends Widget {
     this.iframe.style.setProperty('height', '100%', '');
     this.iframe.style.setProperty('width', '100%', '');
 
+    // Various permissions. Some of these aren't currently used but might be in
+    // the future.
+    this.iframe.setAttribute('allowFullScreen', '');
+    this.iframe.setAttribute(
+      'allow',
+      'accelerometer; autoplay; clipboard-write; gyroscope'
+    );
+
     // Don't start trying to process messages until the iframe is loaded.
     // Otherwise we can get an error where our postMessage goes to the wrong
     // place.
