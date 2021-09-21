@@ -1,3 +1,9 @@
+# @wwtelescope/jupyterlab 1.1.2 (2021-09-21)
+
+- Give the iframe permissions like allowfullscreen, so that the user can
+  fullscreen the WWT window (#6, @pkgw).
+
+
 # @wwtelescope/jupyterlab 1.1.1 (2021-07-29)
 
 The 1.1.0 release accidentally contained a local hack that made it not work at
