@@ -30,6 +30,21 @@ $ jupyter labextension install @wwtelescope/jupyterlab
 There is a `jupyter labextension uninstall` command to remove the extension.
 
 
+## Configuration
+
+The extension has one configuration setting, `appUrl`, that should be the URL to
+use for loading the [WWT research app][rapp]. The default value is the latest
+web-hosted version of the app, found at
+`https://web.wwtassets.org/research/latest/`. It might be useful to override
+this for local development or to force the use of a local app
+(required by some servers for security reasons).
+
+[rapp]: https://docs.worldwidetelescope.org/research-app/latest/
+
+Users can change extension settings in the JupyterLab “Advanced Settings
+Editor”, accessible through the “Settings” menu.
+
+
 ## Development
 
 Since this repo contains a JupyterLab extension, the primary build interface is

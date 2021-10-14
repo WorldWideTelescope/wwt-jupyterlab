@@ -16,12 +16,15 @@ import { ILauncher } from '@jupyterlab/launcher';
 
 import { INotebookTracker } from '@jupyterlab/notebook';
 
+import { ISettingRegistry } from '@jupyterlab/settingregistry';
+
 import { LabIcon } from '@jupyterlab/ui-components';
 
 import { WWTLabCommManager } from './comms';
 import { WWTLabViewer } from './viewer';
 import WWT_ICON from '../style/icons/wwt.svg';
 
+const RESEARCH_PLUGIN_ID = '@wwtelescope/jupyterlab:research';
 const CATEGORY = 'AAS WorldWide Telescope';
 const OPEN_COMMAND = 'wwtelescope:open';
 
@@ -34,24 +37,33 @@ class WWTLabExtensionState {
   constructor(
     app: JupyterFrontEnd,
     restorer: ILayoutRestorer,
-    notebooks: INotebookTracker
+    notebooks: INotebookTracker,
+    settings: ISettingRegistry,
   ) {
     this.app = app;
 
     // Set up to track and restore widget state. Of course we're not correctly
     // persisting the internal engine state.
+
     this.tracker = new WidgetTracker<MainAreaWidget<WWTLabViewer>>({
-      namespace: '@wwtelescope/jupyterlab:research'
+      namespace: RESEARCH_PLUGIN_ID
     });
     restorer.restore(this.tracker, {
       command: OPEN_COMMAND,
-      name: () => '@wwtelescope/jupyterlab:research'
+      name: () => RESEARCH_PLUGIN_ID
     });
 
     this.commMgr = new WWTLabCommManager(
-      '@wwtelescope/jupyterlab:research',
+      RESEARCH_PLUGIN_ID,
       notebooks
     );
+
+    // Set up to track settings.
+
+    settings.load(RESEARCH_PLUGIN_ID).then((s) => {
+      this.onSettingsUpdate(s);
+      s.changed.connect(this.onSettingsUpdate);
+    });
 
     // Check whether the WWT Kernel Data Relay server extension is installed.
     // We'll pass this information to kernels so that they can give the user
@@ -69,10 +81,11 @@ class WWTLabExtensionState {
   private tracker: WidgetTracker;
   private commMgr: WWTLabCommManager;
   private widget: MainAreaWidget<WWTLabViewer> | null = null;
+  private appUrl = "https://web.wwtassets.org/research/latest/"; // sync with schema/*.json
 
   onOpenNewViewer(): void {
     if (this.widget === null) {
-      const content = new WWTLabViewer(this.commMgr);
+      const content = new WWTLabViewer(this.commMgr, this.appUrl);
 
       this.widget = new MainAreaWidget({ content });
       this.widget.id = '@wwtelescope/jupyterlab:research:wwt';
@@ -94,6 +107,14 @@ class WWTLabExtensionState {
 
     this.app.shell.activateById(this.widget.id);
   }
+
+  private readonly onSettingsUpdate = (settings: ISettingRegistry.ISettings): void => {
+    this.appUrl = settings.get('appUrl').composite as string;
+    // If there is an active widget, in principle we could have a way to tell it
+    // to reload its iframe, but that would be annoying to implement and doesn't
+    // enable any realistic user wins that I can see -- just close and reopen
+    // the app pane.
+  }
 }
 
 function activate(
@@ -101,9 +122,10 @@ function activate(
   palette: ICommandPalette,
   launcher: ILauncher,
   restorer: ILayoutRestorer,
-  notebooks: INotebookTracker
+  notebooks: INotebookTracker,
+  settings: ISettingRegistry,
 ): void {
-  const state = new WWTLabExtensionState(app, restorer, notebooks);
+  const state = new WWTLabExtensionState(app, restorer, notebooks, settings);
 
   app.commands.addCommand(OPEN_COMMAND, {
     label: args =>
@@ -129,9 +151,9 @@ function activate(
  * Initialization data for the extension.
  */
 const extension: JupyterFrontEndPlugin<void> = {
-  id: '@wwtelescope/jupyterlab:research',
+  id: RESEARCH_PLUGIN_ID,
   autoStart: true,
-  requires: [ICommandPalette, ILauncher, ILayoutRestorer, INotebookTracker],
+  requires: [ICommandPalette, ILauncher, ILayoutRestorer, INotebookTracker, ISettingRegistry],
   activate: activate
 };
 
