@@ -1,0 +1,16 @@
+{
+  "title": "AAS WorldWide Telescope",
+  "description": "Settings for the AAS WorldWide Telescope JupyterLab integration.",
+  "jupyter.lab.setting-icon": "@wwtelescope/jupyterlab:research:wwt",
+  "jupyter.lab.setting-icon-label": "AAS WorldWide Telescope",
+  "properties": {
+    "appUrl": {
+      "title": "WWT research application URL",
+      "description": "The URL of the research application web app.",
+      "type": "string",
+      "default": "https://web.wwtassets.org/research/latest/"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object"
+}
