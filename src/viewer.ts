@@ -25,7 +25,7 @@ export class WWTLabViewer extends Widget {
 
     window.addEventListener(
       'message',
-      event => {
+      (event) => {
         if (event.origin === iframeOrigin) {
           this.onIframeMessage(event.data);
         }

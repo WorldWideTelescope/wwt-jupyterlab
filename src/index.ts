@@ -1,13 +1,13 @@
 import {
   ILayoutRestorer,
   JupyterFrontEnd,
-  JupyterFrontEndPlugin
+  JupyterFrontEndPlugin,
 } from '@jupyterlab/application';
 
 import {
   ICommandPalette,
   MainAreaWidget,
-  WidgetTracker
+  WidgetTracker,
 } from '@jupyterlab/apputils';
 
 import { PageConfig } from '@jupyterlab/coreutils';
@@ -30,7 +30,7 @@ const OPEN_COMMAND = 'wwtelescope:open';
 
 const wwtIcon = new LabIcon({
   name: '@wwtelescope/jupyterlab:research:wwt',
-  svgstr: WWT_ICON
+  svgstr: WWT_ICON,
 });
 
 class WWTLabExtensionState {
@@ -38,7 +38,7 @@ class WWTLabExtensionState {
     app: JupyterFrontEnd,
     restorer: ILayoutRestorer,
     notebooks: INotebookTracker,
-    settings: ISettingRegistry,
+    settings: ISettingRegistry
   ) {
     this.app = app;
 
@@ -46,17 +46,14 @@ class WWTLabExtensionState {
     // persisting the internal engine state.
 
     this.tracker = new WidgetTracker<MainAreaWidget<WWTLabViewer>>({
-      namespace: RESEARCH_PLUGIN_ID
+      namespace: RESEARCH_PLUGIN_ID,
     });
     restorer.restore(this.tracker, {
       command: OPEN_COMMAND,
-      name: () => RESEARCH_PLUGIN_ID
+      name: () => RESEARCH_PLUGIN_ID,
     });
 
-    this.commMgr = new WWTLabCommManager(
-      RESEARCH_PLUGIN_ID,
-      notebooks
-    );
+    this.commMgr = new WWTLabCommManager(RESEARCH_PLUGIN_ID, notebooks);
 
     // Set up to track settings.
 
@@ -81,7 +78,7 @@ class WWTLabExtensionState {
   private tracker: WidgetTracker;
   private commMgr: WWTLabCommManager;
   private widget: MainAreaWidget<WWTLabViewer> | null = null;
-  private appUrl = "https://web.wwtassets.org/research/latest/"; // sync with schema/*.json
+  private appUrl = 'https://web.wwtassets.org/research/latest/'; // sync with schema/*.json
 
   onOpenNewViewer(): void {
     if (this.widget === null) {
@@ -108,13 +105,15 @@ class WWTLabExtensionState {
     this.app.shell.activateById(this.widget.id);
   }
 
-  private readonly onSettingsUpdate = (settings: ISettingRegistry.ISettings): void => {
+  private readonly onSettingsUpdate = (
+    settings: ISettingRegistry.ISettings
+  ): void => {
     this.appUrl = settings.get('appUrl').composite as string;
     // If there is an active widget, in principle we could have a way to tell it
     // to reload its iframe, but that would be annoying to implement and doesn't
     // enable any realistic user wins that I can see -- just close and reopen
     // the app pane.
-  }
+  };
 }
 
 function activate(
@@ -123,19 +122,19 @@ function activate(
   launcher: ILauncher,
   restorer: ILayoutRestorer,
   notebooks: INotebookTracker,
-  settings: ISettingRegistry,
+  settings: ISettingRegistry
 ): void {
   const state = new WWTLabExtensionState(app, restorer, notebooks, settings);
 
   app.commands.addCommand(OPEN_COMMAND, {
-    label: args =>
+    label: (args) =>
       args['isPalette']
         ? 'Open AAS WorldWide Telescope Viewer'
         : 'AAS WorldWide Telescope',
     caption: 'Open the AAS WorldWide Telescope viewer',
     icon: wwtIcon,
-    iconClass: args => (args['isPalette'] ? '' : 'jp-TerminalIcon'),
-    execute: state.onOpenNewViewer.bind(state)
+    iconClass: (args) => (args['isPalette'] ? '' : 'jp-TerminalIcon'),
+    execute: state.onOpenNewViewer.bind(state),
   });
 
   palette.addItem({ command: OPEN_COMMAND, category: CATEGORY });
@@ -143,7 +142,7 @@ function activate(
   launcher.add({
     command: OPEN_COMMAND,
     category: 'Other',
-    rank: 1
+    rank: 1,
   });
 }
 
@@ -153,8 +152,14 @@ function activate(
 const extension: JupyterFrontEndPlugin<void> = {
   id: RESEARCH_PLUGIN_ID,
   autoStart: true,
-  requires: [ICommandPalette, ILauncher, ILayoutRestorer, INotebookTracker, ISettingRegistry],
-  activate: activate
+  requires: [
+    ICommandPalette,
+    ILauncher,
+    ILayoutRestorer,
+    INotebookTracker,
+    ISettingRegistry,
+  ],
+  activate: activate,
 };
 
 export default extension;

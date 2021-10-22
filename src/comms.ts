@@ -22,7 +22,7 @@ import { Kernel, KernelMessage, Session } from '@jupyterlab/services';
 
 import {
   isPingPongMessage,
-  PingPongMessage
+  PingPongMessage,
 } from '@wwtelescope/research-app-messages';
 
 class Connection {
@@ -95,7 +95,7 @@ export class WWTLabCommManager {
         comm.send({
           content: { _pywwtExpedite: true },
           type: 'wwt_jupyter_startup_info',
-          dataRelayConfirmedAvailable: this.dataRelayConfirmedAvailable
+          dataRelayConfirmedAvailable: this.dataRelayConfirmedAvailable,
         });
       } catch {
         // Insta-death, I guess?
@@ -162,7 +162,7 @@ export class WWTLabCommManager {
     const ping: PingPongMessage = {
       type: 'wwt_ping_pong',
       sessionId: this.targetName,
-      threadId: '' + Date.now()
+      threadId: '' + Date.now(),
     };
 
     this.onAnyMessage(ping as any); // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -177,7 +177,7 @@ export class WWTLabCommManager {
     const msg = {
       content: { _pywwtExpedite: true },
       type: 'wwt_jupyter_viewer_status',
-      alive: appAlive
+      alive: appAlive,
     };
 
     this.activeComms.forEach((conn: Connection) => {
