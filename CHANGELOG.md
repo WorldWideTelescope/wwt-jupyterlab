@@ -1,3 +1,13 @@
+# @wwtelescope/jupyterlab 1.2.0 (2021-10-23)
+
+- Add a "prebuilt" version of the extension, available in the Python package
+  `wwt_jupyterlab_extension` (#7, @pkgw).
+- Make the app URL configurable using JupyterLab's settings framework (#7,
+  @pkgw). The setting is `@wwtelescope/jupyterlab:research/appUrl`.
+- Improve the package metadata, such as `jupyerlab/discovery` records in
+  the `package.json` file (#7, @pkgw).
+
+
 # @wwtelescope/jupyterlab 1.1.2 (2021-09-21)
 
 - Give the iframe permissions like allowfullscreen, so that the user can

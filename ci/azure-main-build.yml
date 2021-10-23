@@ -1,4 +1,4 @@
-# Copyright 2020 the .NET Foundation
+# Copyright 2020-2021 the .NET Foundation
 # Licensed under the MIT License
 
 # Main build stage.
@@ -16,23 +16,21 @@ jobs:
     parameters:
       setupBuild: true
 
-  # Build
+  # Build the JS package
 
   - bash: |
       set -euo pipefail
       source activate-conda.sh
-      conda activate build
       set -x
       jlpm install
     displayName: jlpm install
 
-  # Create and stage our artifacts. (No reason not to do this ASAP -- these can
+  # Create and stage JS artifacts. (No reason not to do this ASAP -- these can
   # help debug build problems.)
 
   - bash: |
       set -euo pipefail
       source activate-conda.sh
-      conda activate build
       set -x
       jlpm pack
     displayName: jlpm pack
@@ -49,15 +47,45 @@ jobs:
       artifactName: npm
       targetPath: $(Build.ArtifactStagingDirectory)/npm
 
-  # Test
+  # Test the JS package
 
   - bash: |
       set -euo pipefail
       source activate-conda.sh
-      conda activate build
       set -x
       jlpm run test
     displayName: jlpm test
+
+  # Build the Python package
+
+  - bash: |
+      set -euo pipefail
+      source activate-conda.sh
+      set -x
+      jupyter labextension build
+    displayName: jupyter labextension build
+
+  - bash: |
+      set -euo pipefail
+      source activate-conda.sh
+      set -x
+      cd wwt_jupyterlab_extension
+      python -m build .
+    displayName: python -m build
+
+  # Python artifact
+
+  - bash: |
+      set -xeuo pipefail
+      mkdir -p $ARTIFACT_STAGING/pypa
+      cp wwt_jupyterlab_extension/dist/* $ARTIFACT_STAGING/pypa
+    displayName: Stage Python package artifacts
+
+  - task: PublishPipelineArtifact@0
+    displayName: Publish Python package artifacts
+    inputs:
+      artifactName: pypa
+      targetPath: $(Build.ArtifactStagingDirectory)/pypa
 
 
 # MacOS - build/test but no artifacts
@@ -73,7 +101,6 @@ jobs:
   - bash: |
       set -euo pipefail
       source activate-conda.sh
-      conda activate build
       set -x
       jlpm install
     displayName: jlpm install
@@ -81,15 +108,29 @@ jobs:
   - bash: |
       set -euo pipefail
       source activate-conda.sh
-      conda activate build
       set -x
       jlpm run test
     displayName: jlpm test
 
+  - bash: |
+      set -euo pipefail
+      source activate-conda.sh
+      set -x
+      jupyter labextension build
+    displayName: jupyter labextension build
 
-# Lint
+  - bash: |
+      set -euo pipefail
+      source activate-conda.sh
+      set -x
+      cd wwt_jupyterlab_extension
+      python -m build .
+    displayName: python -m build
 
-- job: lint
+
+# (JavaScript) Lint
+
+- job: eslint
   pool:
     vmImage: ubuntu-20.04
   steps:
@@ -100,7 +141,6 @@ jobs:
   - bash: |
       set -euo pipefail
       source activate-conda.sh
-      conda activate build
       set -x
       jlpm install
     displayName: jlpm install
@@ -108,7 +148,6 @@ jobs:
   - bash: |
       set -euo pipefail
       source activate-conda.sh
-      conda activate build
       set -x
       jlpm run eslint:check
     displayName: jlpm eslint
