@@ -1,4 +1,11 @@
-# rc: micro bump
+# rc: minor bump
+
+- Support custom app URLs that are relative to the Jupyter(Lab) baseUrl (#9,
+  @pkgw). The custom URL of `/wwtstatic/research/` will use a local copy of the
+  research app installed by (an as-yet-unreleases version of) pywwt.
+
+
+# @wwtelescope/jupyterlab 1.2.1 (2021-10-23)
 
 No code changes from 1.2.0. The automated Python package publication needs some
 work, and we want to keep the version numbers of the two packages precisely in
