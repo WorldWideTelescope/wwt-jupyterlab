@@ -25,7 +25,9 @@ that you already have JupyterLab set up.
 
 If you have JupyterLab >= 3.0 installed, you can install this extension in
 "prebuilt" mode, by installing its corresponding Python package,
-`wwt_jupyterlab_extension`. On the command line this might be done with:
+[`wwt_jupyterlab_extension`]. On the command line this might be done with:
+
+[`wwt_jupyterlab_extension`]: https://pypi.org/project/wwt-jupyterlab-extension/
 
 ```bash
 $ pip install wwt_jupyterlab_extension
@@ -95,6 +97,13 @@ $ jupyter lab --watch  # Run JupyterLab, auto-reloading changed extensions (long
 
 $ jlpm run build  # build locally
 $ jlpm add ${npm_package_name}  # add a dep
+```
+
+To build the prebuilt version of the extension:
+
+```bash
+$ jupyter labextension build
+$ cd wwt_jupyterlab_extension && python -m build
 ```
 
 To detect *and fix* any [ESLint] complaints:
