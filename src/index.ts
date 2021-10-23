@@ -29,7 +29,7 @@ const CATEGORY = 'AAS WorldWide Telescope';
 const OPEN_COMMAND = 'wwtelescope:open';
 
 const wwtIcon = new LabIcon({
-  name: '@wwtelescope/jupyterlab:research:wwt',
+  name: RESEARCH_PLUGIN_ID + ':wwt',
   svgstr: WWT_ICON,
 });
 
@@ -66,8 +66,7 @@ class WWTLabExtensionState {
     // We'll pass this information to kernels so that they can give the user
     // guidance about what features are available.
 
-    const baseUrl = PageConfig.getBaseUrl();
-    const url = baseUrl + 'wwtkdr/_probe';
+    const url = this.maybeApplyBaseUrl('/wwtkdr/_probe');
 
     fetch(url).then((response: Response) => {
       this.commMgr.dataRelayConfirmedAvailable = response.ok;
@@ -85,7 +84,7 @@ class WWTLabExtensionState {
       const content = new WWTLabViewer(this.commMgr, this.appUrl);
 
       this.widget = new MainAreaWidget({ content });
-      this.widget.id = '@wwtelescope/jupyterlab:research:wwt';
+      this.widget.id = RESEARCH_PLUGIN_ID + ':wwt';
       this.widget.title.label = 'AAS WorldWide Telescope';
       this.widget.title.icon = wwtIcon;
       this.widget.title.closable = true;
@@ -108,11 +107,27 @@ class WWTLabExtensionState {
   private readonly onSettingsUpdate = (
     settings: ISettingRegistry.ISettings
   ): void => {
-    this.appUrl = settings.get('appUrl').composite as string;
+    this.appUrl = this.maybeApplyBaseUrl(
+      settings.get('appUrl').composite as string
+    );
     // If there is an active widget, in principle we could have a way to tell it
     // to reload its iframe, but that would be annoying to implement and doesn't
     // enable any realistic user wins that I can see -- just close and reopen
     // the app pane.
+  };
+
+  private readonly maybeApplyBaseUrl = (url: string): string => {
+    if (url.slice(0, 4) === '/wwt') {
+      const baseUrl = PageConfig.getBaseUrl();
+
+      if (baseUrl.slice(-1) === '/') {
+        url = baseUrl.slice(0, -1) + url;
+      } else {
+        url = baseUrl + url;
+      }
+    }
+
+    return url;
   };
 }
 
