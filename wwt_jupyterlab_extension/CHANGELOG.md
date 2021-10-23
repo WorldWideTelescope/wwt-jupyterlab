@@ -1,3 +1,10 @@
+# wwt_jupyterlab_extension 1.3.0 (2021-10-23)
+
+- Support custom app URLs that are relative to the Jupyter(Lab) baseUrl (#9,
+  @pkgw). The custom URL of `/wwtstatic/research/` will use a local copy of the
+  research app installed by (an as-yet-unreleases version of) pywwt.
+
+
 # wwt_jupyterlab_extension 1.2.1 (2021-10-23)
 
 No code changes from 1.2.0. Working out the automatic Python publication

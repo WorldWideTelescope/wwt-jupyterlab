@@ -11,22 +11,20 @@ import { WWTLabCommManager } from './comms';
 
 export class WWTLabViewer extends Widget {
   private readonly comms: WWTLabCommManager;
-  private appUrl: string;
+  private appOrigin: string;
   private iframe: HTMLIFrameElement;
 
   constructor(comms: WWTLabCommManager, appUrl: string) {
     super();
 
-    this.appUrl = appUrl;
-
     // Set up to receive messages from the iframe that we're about to create.
     // For now we just don't worry about removing the listener :-(
-    const iframeOrigin = new URL(this.appUrl).origin;
+    this.appOrigin = new URL(appUrl, location.toString()).origin;
 
     window.addEventListener(
       'message',
       (event) => {
-        if (event.origin === iframeOrigin) {
+        if (event.origin === this.appOrigin) {
           this.onIframeMessage(event.data);
         }
       },
@@ -41,8 +39,7 @@ export class WWTLabViewer extends Widget {
     // prevention, but so long as the research app can't do anything on behalf
     // of the user (which it can't right now because we don't even have
     // "users"), that's OK.
-    this.iframe.src =
-      this.appUrl + '?origin=' + encodeURIComponent(location.origin);
+    this.iframe.src = appUrl + '?origin=' + encodeURIComponent(location.origin);
     this.iframe.style.setProperty('height', '100%', '');
     this.iframe.style.setProperty('width', '100%', '');
 
@@ -73,7 +70,7 @@ export class WWTLabViewer extends Widget {
     const window = this.iframe.contentWindow;
     if (window) {
       classicPywwt.applyBaseUrlIfApplicable(d, location.toString());
-      window.postMessage(d, this.appUrl);
+      window.postMessage(d, this.appOrigin);
     }
   };
 }
