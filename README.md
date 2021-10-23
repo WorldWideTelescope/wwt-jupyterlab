@@ -20,14 +20,61 @@ This extension supports:
 
 ## Installation
 
-If you’ve got JupyterLab all set up, you don’t even need to download the source
-code. All you need to do is:
+There are two main ways you can install this extension. Both of them require
+that you already have JupyterLab set up.
+
+If you have JupyterLab >= 3.0 installed, you can install this extension in
+"prebuilt" mode, by installing its corresponding Python package,
+`wwt_jupyterlab_extension`. On the command line this might be done with:
+
+```bash
+$ pip install wwt_jupyterlab_extension
+```
+
+The prebuilt approach is the one that is generally recommended.
+**Alternatively**, you can also install this extension in "source" mode, using
+its NPM package [`@wwtelescope/jupyterlab`]. You can do this from JupyterLab
+itself, using its [Extension Manager], or from the command line with:
+
+[`@wwtelescope/jupyterlab`]: https://www.npmjs.com/package/@wwtelescope/jupyterlab
+[Extension Manager]: https://jupyterlab.readthedocs.io/en/stable/user/extensions.html#managing-extensions-using-the-extension-manager
 
 ```bash
 $ jupyter labextension install @wwtelescope/jupyterlab
 ```
 
-There is a `jupyter labextension uninstall` command to remove the extension.
+There is a `jupyter labextension uninstall` command to remove the extension if
+you install it this way. This installation mode requires a "rebuild" of the
+JupyterLab app assets, which is somewhat slow and requires the [Node.js] system
+to be available on your system.
+
+[Node.js]: https://nodejs.org/
+
+In concert with this extension we recommend that you install:
+
+- The [jupyterlab_widgets] JupyterLab extension
+- [pywwt] as a Jupyter [server extension]
+- The [wwt_kernel_data_relay] Jupyter server extension
+
+[jupyterlab_widgets]: https://pypi.org/project/jupyterlab-widgets/
+[pywwt]: https://pywwt.readthedocs.io/
+[server extension]: https://jupyter-notebook.readthedocs.io/en/stable/extending/handlers.html#writing-a-notebook-server-extension
+[wwt_kernel_data_relay]: https://pypi.org/project/wwt-kernel-data-relay/
+
+
+## Configuration
+
+The extension has one configuration setting, `appUrl`, that specifies the URL to
+use for loading the [WWT research app][rapp]. The default value is the latest
+web-hosted version of the app, found at
+`https://web.wwtassets.org/research/latest/`. It might be useful to override
+this for local development or to force the use of a local app (required by some
+servers for security reasons).
+
+[rapp]: https://docs.worldwidetelescope.org/research-app/latest/
+
+Users can change extension settings in the JupyterLab “Advanced Settings
+Editor”, accessible through the “Settings” menu.
 
 
 ## Development
@@ -48,6 +95,14 @@ $ jupyter lab --watch  # Run JupyterLab, auto-reloading changed extensions (long
 
 $ jlpm run build  # build locally
 $ jlpm add ${npm_package_name}  # add a dep
+```
+
+To detect *and fix* any [ESLint] complaints:
+
+[ESLint]: https://eslint.org/
+
+```bash
+$ jlpm eslint
 ```
 
 

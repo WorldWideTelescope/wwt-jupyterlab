@@ -106,8 +106,8 @@ steps:
       set -euo pipefail
       source activate-conda.sh
       set -x
-      \conda create -y -n build python=3.9 jupyterlab
-    displayName: Create JupyterLab build environment
+      \conda install -y build jupyterlab
+    displayName: Set up build environment
 
 - ${{ if parameters.setupGit }}:
   - bash: |

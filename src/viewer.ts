@@ -1,4 +1,4 @@
-// Copyright 2020 AAS WorldWide Telescope
+// Copyright 2020-2021 AAS WorldWide Telescope
 // Licensed under the MIT License
 
 import { JSONObject } from '@lumino/coreutils';
@@ -9,24 +9,23 @@ import { classicPywwt } from '@wwtelescope/research-app-messages';
 
 import { WWTLabCommManager } from './comms';
 
-// TODO: make runtime configurable
-// XXX: hardcoding "latest"
-const IFRAME_URL = 'https://web.wwtassets.org/research/latest/';
-
 export class WWTLabViewer extends Widget {
   private readonly comms: WWTLabCommManager;
+  private appUrl: string;
   private iframe: HTMLIFrameElement;
 
-  constructor(comms: WWTLabCommManager) {
+  constructor(comms: WWTLabCommManager, appUrl: string) {
     super();
+
+    this.appUrl = appUrl;
 
     // Set up to receive messages from the iframe that we're about to create.
     // For now we just don't worry about removing the listener :-(
-    const iframeOrigin = new URL(IFRAME_URL).origin;
+    const iframeOrigin = new URL(this.appUrl).origin;
 
     window.addEventListener(
       'message',
-      event => {
+      (event) => {
         if (event.origin === iframeOrigin) {
           this.onIframeMessage(event.data);
         }
@@ -43,7 +42,7 @@ export class WWTLabViewer extends Widget {
     // of the user (which it can't right now because we don't even have
     // "users"), that's OK.
     this.iframe.src =
-      IFRAME_URL + '?origin=' + encodeURIComponent(location.origin);
+      this.appUrl + '?origin=' + encodeURIComponent(location.origin);
     this.iframe.style.setProperty('height', '100%', '');
     this.iframe.style.setProperty('width', '100%', '');
 
@@ -74,7 +73,7 @@ export class WWTLabViewer extends Widget {
     const window = this.iframe.contentWindow;
     if (window) {
       classicPywwt.applyBaseUrlIfApplicable(d, location.toString());
-      window.postMessage(d, IFRAME_URL);
+      window.postMessage(d, this.appUrl);
     }
   };
 }
