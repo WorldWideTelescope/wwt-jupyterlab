@@ -1,3 +1,9 @@
+# wwt_jupyterlab_extension 1.2.1 (2021-10-23)
+
+No code changes from 1.2.0. Working out the automatic Python publication
+infrastructure.
+
+
 # wwt_jupyterlab_extension 1.2.0 (2021-10-23)
 
 This package provides the new "prebuilt" version of the [@wwtelescope/jupyterlab]

@@ -1,3 +1,10 @@
+# @wwtelescope/jupyterlab 1.2.1 (2021-10-23)
+
+No code changes from 1.2.0. The automated Python package publication needs some
+work, and we want to keep the version numbers of the two packages precisely in
+sync.
+
+
 # @wwtelescope/jupyterlab 1.2.0 (2021-10-23)
 
 - Add a "prebuilt" version of the extension, available in the Python package
