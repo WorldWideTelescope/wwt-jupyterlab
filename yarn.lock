@@ -1149,10 +1149,10 @@
   resolved "https://registry.yarnpkg.com/@webpack-cli/serve/-/serve-1.6.0.tgz#2c275aa05c895eccebbfc34cfb223c6e8bd591a2"
   integrity sha512-ZkVeqEmRpBV2GHvjjUZqEai2PpUbuq8Bqd//vEYsp63J8WyexI8ppCqVS3Zs0QADf6aWuPdU+0XsPI647PVlQA==
 
-"@wwtelescope/research-app-messages@^0.11.1":
-  version "0.11.1"
-  resolved "https://registry.yarnpkg.com/@wwtelescope/research-app-messages/-/research-app-messages-0.11.1.tgz#5a862b7de1dfb73e7f8e37b5ff6f0339b23aff2a"
-  integrity sha512-ZLX2vVqmCSafdX2o0X3G6uSUqZVq/DSUspOdagcFVzkhKA4ZfnPHvTW9m9qEhOEJ5SBdlMj4Q4o3SjpaXEwawg==
+"@wwtelescope/research-app-messages@^0.11.2":
+  version "0.11.2"
+  resolved "https://registry.yarnpkg.com/@wwtelescope/research-app-messages/-/research-app-messages-0.11.2.tgz#7d5da854d5a1a5c61f6509bc2911d9ff2e1bf8b7"
+  integrity sha512-UitgJ1OMURyHbzjtac1bm60kMqr5Vg2c1XS6lCP4MFf08nziZDQgR0Qn4KGZJ6sjr7V8CDvKTUorlosrNACWug==
 
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
@@ -3396,9 +3396,9 @@ kleur@4.1.4:
   integrity sha512-8QADVssbrFjivHWQU7KkMgptGTl6WAcSdlbBPY4uNF+mWr6DGcKrvY2w4FQJoXch7+fKMjj0dRrL75vk3k23OA==
 
 klona@^2.0.3:
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/klona/-/klona-2.0.4.tgz#7bb1e3affb0cb8624547ef7e8f6708ea2e39dfc0"
-  integrity sha512-ZRbnvdg/NxqzC7L9Uyqzf4psi1OM4Cuc+sJAkQPjO6XkQIJTNbfK2Rsmbw8fx1p2mkZdp2FZYo2+LwXYY/uwIA==
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/klona/-/klona-2.0.5.tgz#d166574d90076395d9963aa7a928fabb8d76afbc"
+  integrity sha512-pJiBpiXMbt7dkzXe8Ghj/u4FfXOOa98fPW+bihOJ4SjnoijweJrNThJfd3ifXpXhREjpoF2mZVH1GfS9LV3kHQ==
 
 level-codec@^9.0.0:
   version "9.0.2"
