@@ -1,5 +1,11 @@
 # rc: micro bump
 
+- Use a yet newer version of `@wwtelescope/research-app-messages` — the previous
+  fix was incomplete.
+
+
+# wwt_jupyterlab_extension 1.3.1 (2021-10-27)
+
 - Use a newer version of the `@wwtelescope/research-app-messages` dependency to
   solve a bug that caused some URLs to get modified as they pass through the
   messaging system (#10, @pkgw). This made it so that some WWT APIs that
