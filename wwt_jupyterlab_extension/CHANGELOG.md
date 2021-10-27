@@ -1,4 +1,13 @@
-# rc: minor bump
+# rc: micro bump
+
+- Use a newer version of the `@wwtelescope/research-app-messages` dependency to
+  solve a bug that caused some URLs to get modified as they pass through the
+  messaging system (#10, @pkgw). This made it so that some WWT APIs that
+  depended on exact URL matching wouldn't work, notably the loading of imagesets
+  by URL.
+
+
+# wwt_jupyterlab_extension 1.3.0 (2021-10-23)
 
 - Support custom app URLs that are relative to the Jupyter(Lab) baseUrl (#9,
   @pkgw). The custom URL of `/wwtstatic/research/` will use a local copy of the

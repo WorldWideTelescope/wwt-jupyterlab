@@ -61,7 +61,7 @@ In concert with this extension we recommend that you install:
 [jupyterlab_widgets]: https://pypi.org/project/jupyterlab-widgets/
 [pywwt]: https://pywwt.readthedocs.io/
 [server extension]: https://jupyter-notebook.readthedocs.io/en/stable/extending/handlers.html#writing-a-notebook-server-extension
-[wwt_kernel_data_relay]: https://pypi.org/project/wwt-kernel-data-relay/
+[wwt_kernel_data_relay]: https://wwt-kernel-data-relay.readthedocs.io/
 
 
 ## Configuration
@@ -97,21 +97,11 @@ $ jupyter lab --watch  # Run JupyterLab, auto-reloading changed extensions (long
 
 $ jlpm run build  # build locally
 $ jlpm add ${npm_package_name}  # add a dep
-```
 
-To build the prebuilt version of the extension:
+$ jupyter labextension build  # build the prebuilt version of the extension
+$ cd wwt_jupyterlab_extension && python -m build  # build dists of the prebuild Python module
 
-```bash
-$ jupyter labextension build
-$ cd wwt_jupyterlab_extension && python -m build
-```
-
-To detect *and fix* any [ESLint] complaints:
-
-[ESLint]: https://eslint.org/
-
-```bash
-$ jlpm eslint
+$ jlpm eslint  # detect and fix ESLint complaints
 ```
 
 
