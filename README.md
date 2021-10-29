@@ -76,7 +76,23 @@ servers for security reasons).
 [rapp]: https://docs.worldwidetelescope.org/research-app/latest/
 
 Users can change extension settings in the JupyterLab “Advanced Settings
-Editor”, accessible through the “Settings” menu.
+Editor”, accessible through the “Settings” menu. To change this setting in a
+system-wide fashion, create a file named
+`$JUPYTER_DATA_DIR/lab/settings/overrides.json` with contents of the following
+form:
+
+```json
+{
+  "@wwtelescope/jupyterlab:research": {
+    "appUrl": "/wwtstatic/research/"
+  }
+}
+```
+
+Here, `$JUPYTER_DATA_DIR` can be obtained by running the command `jupyter
+--data-dir`, and the customized lab URL is `/wwtstatic/research/`, which will
+use a locally bundled version of the app if you've installed the latest version
+of [pywwt] as a Jupyter server extension.
 
 
 ## Development
