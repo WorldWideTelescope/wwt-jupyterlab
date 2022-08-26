@@ -65,18 +65,21 @@ export class WWTLabViewer extends Widget {
     // Relaying pointer move and up events to parent elements to allow drag
     // operations over the iframe. For example, when moving windows inside
     // jupyter lab.
-    if (msg.type == 'wwt_pointer_move' || msg.type == 'wwt_pointer_up'){
-        var boundingClientRect = this.iframe.getBoundingClientRect();
-        // Jupyter lab seems to not listen to pointer events, so we use mouse
-        // events instead.
-        var mouseEvent = new MouseEvent(msg.type == 'wwt_pointer_move' ? 'mousemove' : 'mouseup', {
+    if (msg.type === 'wwt_pointer_move' || msg.type === 'wwt_pointer_up') {
+      const boundingClientRect = this.iframe.getBoundingClientRect();
+      // Jupyter lab seems to not listen to pointer events, so we use mouse
+      // events instead.
+      const mouseEvent = new MouseEvent(
+        msg.type === 'wwt_pointer_move' ? 'mousemove' : 'mouseup',
+        {
           bubbles: true,
           cancelable: false,
           clientX: msg.clientX + boundingClientRect.left,
-          clientY: msg.clientY + boundingClientRect.top
-        });
+          clientY: msg.clientY + boundingClientRect.top,
+        }
+      );
 
-        this.iframe.dispatchEvent(mouseEvent);
+      this.iframe.dispatchEvent(mouseEvent);
     } else {
       // eslint-disable-line @typescript-eslint/no-explicit-any
       this.comms.broadcastMessage(msg as any); // eslint-disable-line @typescript-eslint/no-explicit-any
