@@ -1,3 +1,11 @@
+# @wwtelescope/jupyterlab 1.4.0 (2022-09-07)
+
+- Start relaying mouse-movement events if the WWT app emits them (#13,
+  @imbasimba). This should fix drag-and-drop operations in JupyterLab that cross
+  over the WWT viewer. This functionality requires
+  `@wwtelescope/research-app >= 0.11`.
+
+
 # @wwtelescope/jupyterlab 1.3.2 (2021-10-27)
 
 - Use a yet newer version of `@wwtelescope/research-app-messages` — the previous
