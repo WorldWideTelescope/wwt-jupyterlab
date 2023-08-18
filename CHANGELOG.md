@@ -1,4 +1,15 @@
-# rc: minor bump
+# rc: major bump
+
+- Update to be compatible with the JupyterLab 4.x series (#14, @pkgw). Nothing
+  about the package implementation has actually changed, but because the
+  dependencies all undergo major version updates, we follow the recommendation
+  to apply a major version bump here as well. The 1.x series remains compatible
+  with JupyterLab 2.x and 3.x, and for the time being there are no functional
+  differences between the two major versions of the extension.
+- Update sponsorship branding and contact information (#14, @pkgw).
+
+
+# @wwtelescope/jupyterlab 1.4.0 (2022-09-07)
 
 - Start relaying mouse-movement events if the WWT app emits them (#13,
   @imbasimba). This should fix drag-and-drop operations in JupyterLab that cross

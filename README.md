@@ -1,11 +1,11 @@
 [![Build Status](https://dev.azure.com/aasworldwidetelescope/WWT/_apis/build/status/WorldWideTelescope.wwt-jupyterlab?branchName=master)](https://dev.azure.com/aasworldwidetelescope/WWT/_build/latest?definitionId=24&branchName=master)
+[![Powered by NumFOCUS](https://img.shields.io/badge/powered%20by-NumFOCUS-orange.svg?style=flat&colorA=E1523D&colorB=007D8A)](http://numfocus.org)
 
 # `@wwtelescope/jupyterlab`
 
-[AAS] [WorldWide Telescope][wwt-home] (WWT) inside [JupyterLab]. Learn more
+[WorldWide Telescope][wwt-home] (WWT) inside [JupyterLab]. Learn more
 about WWT [here][wwt-home].
 
-[AAS]: https://aas.org/
 [wwt-home]: https://worldwidetelescope.org/home/
 [JupyterLab]: https://jupyterlab.readthedocs.io/
 
@@ -14,18 +14,18 @@ about WWT [here][wwt-home].
 
 This extension supports:
 
-- The JupyterLab 2.x series
-- The JupyterLab 3.x series
+- The JupyterLab 4.x series
+
+Older releases support the 2.x and 3.x series of JupyterLab.
 
 
 ## Installation
 
-There are two main ways you can install this extension. Both of them require
-that you already have JupyterLab set up.
+To install this extension, you must first install JupyterLab. Currently this
+extensions only supports the JupyterLab 4.x version series.
 
-If you have JupyterLab >= 3.0 installed, you can install this extension in
-"prebuilt" mode, by installing its corresponding Python package,
-[`wwt_jupyterlab_extension`]. On the command line this might be done with:
+Next, install this extension’s Python package, [`wwt_jupyterlab_extension`]. On
+the command line this might be done with:
 
 [`wwt_jupyterlab_extension`]: https://pypi.org/project/wwt-jupyterlab-extension/
 
@@ -33,24 +33,8 @@ If you have JupyterLab >= 3.0 installed, you can install this extension in
 $ pip install wwt_jupyterlab_extension
 ```
 
-The prebuilt approach is the one that is generally recommended.
-**Alternatively**, you can also install this extension in "source" mode, using
-its NPM package [`@wwtelescope/jupyterlab`]. You can do this from JupyterLab
-itself, using its [Extension Manager], or from the command line with:
-
-[`@wwtelescope/jupyterlab`]: https://www.npmjs.com/package/@wwtelescope/jupyterlab
-[Extension Manager]: https://jupyterlab.readthedocs.io/en/stable/user/extensions.html#managing-extensions-using-the-extension-manager
-
-```bash
-$ jupyter labextension install @wwtelescope/jupyterlab
-```
-
-There is a `jupyter labextension uninstall` command to remove the extension if
-you install it this way. This installation mode requires a "rebuild" of the
-JupyterLab app assets, which is somewhat slow and requires the [Node.js] system
-to be available on your system.
-
-[Node.js]: https://nodejs.org/
+This is known as a “prebuilt” extension installation is strongly preferred in
+current versions of JupyterLab.
 
 In concert with this extension we recommend that you install:
 
@@ -60,7 +44,7 @@ In concert with this extension we recommend that you install:
 
 [jupyterlab_widgets]: https://pypi.org/project/jupyterlab-widgets/
 [pywwt]: https://pywwt.readthedocs.io/
-[server extension]: https://jupyter-notebook.readthedocs.io/en/stable/extending/handlers.html#writing-a-notebook-server-extension
+[server extension]: https://jupyter-server.readthedocs.io/en/stable/developers/extensions.html
 [wwt_kernel_data_relay]: https://wwt-kernel-data-relay.readthedocs.io/
 
 
@@ -106,18 +90,15 @@ using the [jlpm] command, which is JupyterLab’s bundled version of [yarn].
 Some useful commands are as follows:
 
 ```bash
-$ jupyter labextension install .  # link your development version of the extension with JupyterLab
-$ jupyter lab build  # Rebuild JupyterLab after making any changes
+$ jlpm run build  # compile TS -> JS
+$ jupyter labextension build  # create wwt_jupyterlab_extension/wwt_jupyterlab_extension/labextension
+$ cd wwt_jupyterlab_extension && python -m build  # create dists of the Python package
+
+$ jlpm add ${npm_package_name}  # add a dep
+$ jlpm eslint  # detect *and fix* ESLint complaints
+
 $ jlpm watch  # Auto-rebuild sources (long-running)
 $ jupyter lab --watch  # Run JupyterLab, auto-reloading changed extensions (long-running)
-
-$ jlpm run build  # build locally
-$ jlpm add ${npm_package_name}  # add a dep
-
-$ jupyter labextension build  # build the prebuilt version of the extension
-$ cd wwt_jupyterlab_extension && python -m build  # build dists of the prebuild Python module
-
-$ jlpm eslint  # detect and fix ESLint complaints
 ```
 
 
@@ -153,19 +134,13 @@ All participation in WWT communities is conditioned on your adherence to the
 
 ## Acknowledgments
 
-The AAS WorldWide Telescope system is a [.NET Foundation] project. Work on WWT
-has been supported by the [American Astronomical Society] (AAS), the US
-[National Science Foundation] (grants [1550701], [1642446], [2004840]), the [Gordon
-and Betty Moore Foundation], and [Microsoft].
+Work on the WorldWide Telescope system has been supported by the [American
+Astronomical Society] (AAS), the [.NET Foundation], and other partners. See [the
+WWT user website][acks] for details.
 
 [American Astronomical Society]: https://aas.org/
 [.NET Foundation]: https://dotnetfoundation.org/
-[National Science Foundation]: https://www.nsf.gov/
-[1550701]: https://www.nsf.gov/awardsearch/showAward?AWD_ID=1550701
-[1642446]: https://www.nsf.gov/awardsearch/showAward?AWD_ID=1642446
-[2004840]: https://www.nsf.gov/awardsearch/showAward?AWD_ID=2004840
-[Gordon and Betty Moore Foundation]: https://www.moore.org/
-[Microsoft]: https://www.microsoft.com/
+[acks]: https://worldwidetelescope.org/about/acknowledgments/
 
 
 ## Legalities

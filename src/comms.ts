@@ -58,7 +58,10 @@ export class WWTLabCommManager {
   private readonly monitorPanel = (panel: NotebookPanel): void => {
     panel.sessionContext.kernelChanged.connect(this.onKernelChanged);
 
-    if (panel.sessionContext.session !== null) {
+    if (
+      panel.sessionContext.session !== null &&
+      panel.sessionContext.session.kernel !== null
+    ) {
       panel.sessionContext.session.kernel.registerCommTarget(
         this.targetName,
         this.onCommOpened
