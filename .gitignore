@@ -1,5 +1,5 @@
 /.vs/
-
+/.yarn/
 dist/
 node_modules/
 tsconfig.tsbuildinfo
