@@ -1,20 +1,66 @@
 [build-system]
-requires = ["jupyter_packaging~=0.10,<2", "jupyterlab~=3.1"]
-build-backend = "jupyter_packaging.build_api"
+requires = ["hatchling>=1.5.0", "jupyterlab>=4.0.0,<5", "hatch-nodejs-version"]
+build-backend = "hatchling.build"
 
-[tool.jupyter-packaging.options]
+[project]
+name = "wwt_jupyterlab_extension"
+readme = "README.md"
+license = { text = "MIT License" }
+requires-python = ">=3.8"
+classifiers = [
+    "Framework :: Jupyter",
+    "Framework :: Jupyter :: JupyterLab",
+    "Framework :: Jupyter :: JupyterLab :: 4",
+    "Framework :: Jupyter :: JupyterLab :: Extensions",
+    "Framework :: Jupyter :: JupyterLab :: Extensions :: Prebuilt",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = []
+dynamic = ["version"]
+
+[tool.hatch.version]
+path = "wwt_jupyterlab_extension/_version.py"
+
+[tool.hatch.build.targets.sdist]
+artifacts = ["wwt_jupyterlab_extension/labextension"]
+
+[tool.hatch.build.targets.wheel.shared-data]
+"wwt_jupyterlab_extension/labextension" = "share/jupyter/labextensions/@wwtelescope/jupyterlab"
+"install.json" = "share/jupyter/labextensions/@wwtelescope/jupyterlab/install.json"
+
+[tool.hatch.build.hooks.jupyter-builder]
+dependencies = ["hatch-jupyter-builder>=0.5"]
+build-function = "hatch_jupyter_builder.npm_builder"
 skip-if-exists = ["wwt_jupyterlab_extension/labextension/static/style.js"]
-ensured-targets = ["wwt_jupyterlab_extension/labextension/static/style.js", "wwt_jupyterlab_extension/labextension/package.json"]
+ensured-targets = [
+    "wwt_jupyterlab_extension/labextension/static/style.js",
+    "wwt_jupyterlab_extension/labextension/package.json",
+]
 
 [tool.jupyter-packaging.builder]
 factory = "jupyter_packaging.npm_builder"
 
-[tool.jupyter-packaging.build-args]
+[tool.hatch.build.hooks.jupyter-builder.build-kwargs]
 build_cmd = "build:prod"
 npm = ["jlpm"]
 
+[tool.hatch.build.hooks.jupyter-builder.editable-build-kwargs]
+build_cmd = "install:extension"
+npm = ["jlpm"]
+source_dir = "src"
+build_dir = "wwt_jupyterlab_examples/labextension"
+
 [tool.check-manifest]
 ignore = ["wwt_jupyterlab_extension/labextension/**", ".*"]
+
+[tool.check-wheel-contents]
+ignore = ["W002"]
 
 [tool.cranko]
 main_version_file = "wwt_jupyterlab_extension/_version.py"
