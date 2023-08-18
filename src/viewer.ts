@@ -1,4 +1,4 @@
-// Copyright 2020-2021 AAS WorldWide Telescope
+// Copyright 2020-2023 WorldWide Telescope project
 // Licensed under the MIT License
 
 import { JSONObject } from '@lumino/coreutils';

@@ -25,7 +25,7 @@ import { WWTLabViewer } from './viewer';
 import WWT_ICON from '../style/icons/wwt.svg';
 
 const RESEARCH_PLUGIN_ID = '@wwtelescope/jupyterlab:research';
-const CATEGORY = 'AAS WorldWide Telescope';
+const CATEGORY = 'WorldWide Telescope';
 const OPEN_COMMAND = 'wwtelescope:open';
 
 const wwtIcon = new LabIcon({
@@ -85,7 +85,7 @@ class WWTLabExtensionState {
 
       this.widget = new MainAreaWidget({ content });
       this.widget.id = RESEARCH_PLUGIN_ID + ':wwt';
-      this.widget.title.label = 'AAS WorldWide Telescope';
+      this.widget.title.label = 'WorldWide Telescope';
       this.widget.title.icon = wwtIcon;
       this.widget.title.closable = true;
       this.widget.disposed.connect(() => {
@@ -144,9 +144,9 @@ function activate(
   app.commands.addCommand(OPEN_COMMAND, {
     label: (args) =>
       args['isPalette']
-        ? 'Open AAS WorldWide Telescope Viewer'
-        : 'AAS WorldWide Telescope',
-    caption: 'Open the AAS WorldWide Telescope viewer',
+        ? 'Open WorldWide Telescope Viewer'
+        : 'WorldWide Telescope',
+    caption: 'Open the WorldWide Telescope viewer',
     icon: wwtIcon,
     iconClass: (args) => (args['isPalette'] ? '' : 'jp-TerminalIcon'),
     execute: state.onOpenNewViewer.bind(state),

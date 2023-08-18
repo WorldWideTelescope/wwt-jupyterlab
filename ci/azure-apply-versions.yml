@@ -6,7 +6,7 @@
 jobs:
 - job: apply_versions
   pool:
-    vmImage: ubuntu-20.04
+    vmImage: ubuntu-latest
 
   steps:
   - template: azure-job-setup.yml
