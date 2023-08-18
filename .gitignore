@@ -1,5 +1,6 @@
 /.vs/
-
+/.yarn/
+__pycache__/
 dist/
 node_modules/
 tsconfig.tsbuildinfo
