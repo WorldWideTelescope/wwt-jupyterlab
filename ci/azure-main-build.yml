@@ -25,6 +25,13 @@ jobs:
       jlpm install
     displayName: jlpm install
 
+  - bash: |
+      set -euo pipefail
+      source activate-conda.sh
+      set -x
+      jlpm build
+    displayName: jlpm build
+
   # Create and stage JS artifacts. (No reason not to do this ASAP -- these can
   # help debug build problems.)
 
@@ -104,6 +111,13 @@ jobs:
       set -x
       jlpm install
     displayName: jlpm install
+
+  - bash: |
+      set -euo pipefail
+      source activate-conda.sh
+      set -x
+      jlpm build
+    displayName: jlpm build
 
   - bash: |
       set -euo pipefail
