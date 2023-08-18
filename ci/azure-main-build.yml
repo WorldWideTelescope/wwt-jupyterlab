@@ -9,7 +9,7 @@ jobs:
 
 - job: build_linux
   pool:
-    vmImage: ubuntu-20.04
+    vmImage: ubuntu-22.04
 
   steps:
   - template: azure-job-setup.yml
@@ -92,7 +92,7 @@ jobs:
 
 - job: build_macos
   pool:
-    vmImage: macos-10.15
+    vmImage: macos-12
   steps:
   - template: azure-job-setup.yml
     parameters:
@@ -132,7 +132,7 @@ jobs:
 
 - job: eslint
   pool:
-    vmImage: ubuntu-20.04
+    vmImage: ubuntu-latest
   steps:
   - template: azure-job-setup.yml
     parameters:
