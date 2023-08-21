@@ -118,7 +118,7 @@ steps:
 
 - ${{ if parameters.setupNpm }}:
   - bash: |
-      cranko npm install-token
-    displayName: Set up NPM authentication
+      cranko npm install-token --yarn
+    displayName: Set up Yarn authentication
     env:
       NPM_TOKEN: $(NPM_TOKEN)
