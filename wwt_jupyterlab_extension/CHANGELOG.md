@@ -1,5 +1,11 @@
 # rc: micro bump
 
+- Fix import of the Python module in the new JupyterLab packaging framework
+  (#16, @pkgw).
+
+
+# wwt_jupyterlab_extension 2.0.1 (2023-08-21)
+
 - No code changes from 2.0.0. We're issuing a new release to stay in sync with
   the NPM package, which had a problem with its automated publishing (#15,
   @pkgw).
