@@ -1,4 +1,11 @@
-# rc: major bump
+# rc: micro bump
+
+- No code changes from 2.0.0. We're issuing a new release to stay in sync with
+  the NPM package, which had a problem with its automated publishing (#15,
+  @pkgw).
+
+
+# wwt_jupyterlab_extension 2.0.0 (2023-08-18)
 
 - Update to be compatible with the JupyterLab 4.x series (#14, @pkgw). Nothing
   about the package implementation has actually changed, but because the
