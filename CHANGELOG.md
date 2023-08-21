@@ -1,3 +1,8 @@
+# @wwtelescope/jupyterlab 2.0.1 (2023-08-21)
+
+- No code changes, but fix the automated NPM publishing (#15, @pkgw).
+
+
 # @wwtelescope/jupyterlab 2.0.0 (2023-08-18)
 
 - Update to be compatible with the JupyterLab 4.x series (#14, @pkgw). Nothing
