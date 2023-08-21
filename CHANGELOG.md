@@ -1,3 +1,10 @@
+# @wwtelescope/jupyterlab 2.0.2 (2023-08-21)
+
+- No code changes, but this time let's *really* fix the automated NPM publishing
+  (#16, @pkgw). Unfortunately when there's a problem in the automation, all you
+  can really do is make a release and hope that it works ...
+
+
 # @wwtelescope/jupyterlab 2.0.1 (2023-08-21)
 
 - No code changes, but fix the automated NPM publishing (#15, @pkgw).
